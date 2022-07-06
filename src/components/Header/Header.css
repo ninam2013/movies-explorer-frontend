@@ -1,0 +1,143 @@
+.header {
+    display: flex;
+    height: 74px;
+    align-items: center;  
+    justify-content: space-between;
+    padding: 0 70px;   
+}
+
+.header_background_black {
+    background-color: #073042; 
+}
+
+.header_background_white {
+    background-color: #FFF;
+}
+
+.header_location_left {
+    justify-content: flex-start;
+}
+.header__logo {
+    width: 38px;
+    height: 38px;
+}
+
+.header__container-navigation {
+    display: flex;    
+    align-items: center; 
+}
+
+.header__container-navigation {
+    margin-left: 44px;
+}
+
+.navigation-text {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #000; 
+}
+
+.navigation-text_active {
+    font-weight: 500;
+}
+
+.navigation-text_margin_left {
+    margin-left: 16px;
+}
+
+.registration-text {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #FFF; 
+}
+
+.registration-text_color_black {
+    color: #000; 
+}
+
+.account-text {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 12px;
+    color: #000;  
+}
+
+.link {
+    text-decoration: none;   
+}
+
+.link:hover {    
+    animation: ani 1s infinite forwards;   
+}
+
+@keyframes ani {
+    0% {transform: translateY(0%);}
+    25% {transform: translateY(-3%);}
+    50% {transform: translateY(0%);}
+    75% {transform: translateY(3%);}
+    100% {transform: translateY(0);}
+  }
+
+.header__container-registration {
+    display: flex;    
+    align-items: center;
+    margin-left: auto;
+    margin-right: 0;    
+}
+
+.button-green {
+    display: flex;
+    width: 76px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;    
+    background-color: #2BE080;
+    border-radius: 3px;    
+}
+
+.button-profile {
+    display: flex;    
+    width: auto;   
+    height: 32px;   
+    border-radius: 40px;
+    box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
+    align-items: center;
+    padding: 0 3px 0 11px;
+}
+
+.pic-background {
+    display: flex;
+    width: 26px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 0 7px;
+    background-color: #F9F9F9;
+    border-radius: 50%;  
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279.9px) {
+    .header {       
+        padding: 0 30px;   
+    }     
+}
+
+@media screen and (min-width: 320px) and (max-width: 767.9px) {
+    .header {
+        padding: 0 14px;   
+    }           
+
+    .registration-text {        
+        font-size: 10px;
+        line-height: 16px;        
+    } 
+   
+    .button-green {       
+        width: 54px;
+        height: 26px;    
+        margin-left: 14px;            
+    }    
+}
