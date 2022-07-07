@@ -1,15 +1,12 @@
 import React from 'react';
-// import { Route } from 'react-router-dom';
 import './AboutProject.css';
-// import planetWeb from '../../../images/planet-web.png';
 
 
 function AboutProject() {
 
-
     return (
         <>
-            <div className='about-project'>
+            <section className='about-project'>
                 <h2 className='topic-title'>О проекте</h2>
                 <div className='line'></div>
                 <div className='about-project__box-desc'>
@@ -36,7 +33,7 @@ function AboutProject() {
                         <p className='normal-text normal-text_color_grey'>Front-end</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
         </>
     );
