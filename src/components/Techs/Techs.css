@@ -5,24 +5,35 @@
     background-color: #F5F5F5; 
 }
 
-.techs__title {
+.techs__subtitle {
     font-weight: 400;
     font-size: 50px;
     line-height: 58px;
     letter-spacing: -0.04em;
-    text-align: center;
-    padding: 90px 0 26px 0;
+    text-align: center;   
     margin: 0;
 }
 
-.normal-text_text_center {
+.techs__subtitle_padding_set {
+    padding: 90px 0 26px 0;
+}
+
+.techs__text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.techs__text_align_center {
     text-align: center;
 }
 
 .techs__wrap {   
     width: 460px;
     margin: 0 auto;
-    padding: 0 0 100px 0 ;
+    padding: 26px 0 100px 0 ;
 }
 
 .techs__grid {
@@ -54,12 +65,12 @@
         padding: 90px 50px;
     }   
     
-    .techs__title {     
+    .techs__subtitle_padding_set {     
         padding: 80px 0 22px 0;      
     }  
   
     .techs__wrap {           
-        padding: 0 0 83px 0 ;
+        padding: 22px 0 83px 0 ;
     }
 
     .techs__grid {        
@@ -78,20 +89,22 @@
         padding: 70px 18px;
     }
     
-    .techs__title {
+    .techs__subtitle {
         font-size: 30px;
-        line-height: 36px;  
-        padding: 60px 0 24px 0;      
+        line-height: 36px;            
     }
     
-    .normal-text_text_center {
+    .techs__subtitle_padding_set {
+        padding: 60px 0 24px 0;          
+    }
+    .techs__text_align_center {
         text-align: center;
     }
     
     .techs__wrap {   
         width: 292px;
         margin: 0 auto;
-        padding: 0 0 50px 0 ;
+        padding: 24px 0 50px 0 ;
     }
     
     .techs__grid {

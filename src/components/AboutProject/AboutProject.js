@@ -1,17 +1,15 @@
 import React from 'react';
 import './AboutProject.css';
-
+import Headline from '../Headline/Headline';
 
 function AboutProject() {
 
-    return (
-        <>
-            <section className='about-project'>
-                <h2 className='topic-title'>О проекте</h2>
-                <div className='line'></div>
+    return (        
+            <section className='about-project'>   
+                < Headline title = {"О проекте"}/>
                 <div className='about-project__box-desc'>
                     <div className='about-project__stages'>
-                        <h3 className='normal-title'>Дипломный проект включал 5 этапов</h3>
+                        <h3 className='normal-title'>Дипломный проект включал 5 этапов</h3>                        
                         <p className='normal-text normal-text_padding_top'>Составление плана, работу над бэкендом, вёрстку, добавление функциональности и финальные доработки.</p>
                     </div>
                     <div className='about-project__time-spent'>
@@ -33,9 +31,7 @@ function AboutProject() {
                         <p className='normal-text normal-text_color_grey'>Front-end</p>
                     </div>
                 </div>
-            </section>
-
-        </>
+            </section>      
     );
 }
 

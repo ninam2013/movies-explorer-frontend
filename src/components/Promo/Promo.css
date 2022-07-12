@@ -5,10 +5,6 @@
     justify-content: space-between;
 }
 
-.promo__description { 
- 
-}
-
 .promo__title {
     width: 640px;
     font-style: normal;
@@ -60,10 +56,6 @@
     75% {transform: translateY(3%);}
     100% {transform: translateY(0);}
   }
-
-.promo__img {
-
-}
 
 .planet-img {
     width: 310px;
