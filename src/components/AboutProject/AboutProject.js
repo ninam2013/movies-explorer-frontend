@@ -20,15 +20,15 @@ function AboutProject() {
                 <div className='about-project__box-graph'>
                     <div className='about-project__wrap-backend'>
                         <div className='about-project__backend'>
-                            <p className='normal-text'>1 неделя</p>
+                            <p className='about-project__text'>1 неделя</p>
                         </div>
-                        <p className='normal-text normal-text_color_grey'>Back-end</p>
+                        <p className='about-project__text about-project__text_color_grey'>Back-end</p>
                     </div>
                     <div className='about-project__wrap-frontend'>
                         <div className='about-project__frontend'>
-                            <p className='normal-text'>4 недели</p>                            
+                            <p className='about-project__text'>4 недели</p>                            
                         </div>
-                        <p className='normal-text normal-text_color_grey'>Front-end</p>
+                        <p className='about-project__text about-project__text_color_grey'>Front-end</p>
                     </div>
                 </div>
             </section>      

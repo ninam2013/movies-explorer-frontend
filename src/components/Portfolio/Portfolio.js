@@ -1,6 +1,5 @@
 import React from 'react';
 import './Portfolio.css';
-// import face from '../../images/face.jpg';
 
 
 function Portfolio() {
@@ -13,8 +12,8 @@ function Portfolio() {
 
                 <li className='box-list'>
                     <a href='https://ninam2013.github.io/how-to-learn/' className='site-link' rel="noreferrer" target="_blank">
-                        <p className='site-info'>Статичный сайт</p>
-                        <div class="arrow"></div>
+                        <p className='site-info site-info_padding-top_none'>Статичный сайт</p>
+                        <div class="arrow arrow_top_change"></div>
                     </a>
                 </li>
 
@@ -27,7 +26,7 @@ function Portfolio() {
 
                 <li className='box-list'>
                     <a href='https://maninep.nomoredomains.xyz/' className='site-link' rel="noreferrer" target="_blank">
-                        <p className='site-info site-info_padding_none'>Одностраничное приложение</p>
+                        <p className='site-info site-info_padding-bottom_none'>Одностраничное приложение</p>
                         <div class="arrow"></div>
                     </a>
                 </li>

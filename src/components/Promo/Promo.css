@@ -11,6 +11,7 @@
     font-weight: 400;
     font-size: 50px;
     line-height: 58px;
+    letter-spacing: -0.04em;
     color: #FFF;
     -webkit-text-stroke: 1px #000;  
     margin: 0;
@@ -36,7 +37,7 @@
     background-color: transparent;
     align-items: center;
     justify-content: center;
-    margin: 146px 0 75px 0;
+    margin: 146px 0 0 0;
     cursor: pointer;
     color: #FFF;
     font-weight: 500;
