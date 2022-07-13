@@ -6,6 +6,7 @@ import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
+import Error from '../Error/Error';
 
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
         </Route>
         <Route path="/movies">
           <p>Movies</p>
+        </Route>
+        <Route path="/error">
+          <Error />
         </Route>
       </Switch>
       <Footer />

@@ -43,7 +43,20 @@
     line-height: 17px;
     border-radius: 3px;
     border: none;
+    cursor: pointer;   
 }
+
+.form__button:hover {  
+    animation: ani 1s infinite forwards;   
+}
+
+@keyframes ani {
+    0% {transform: translateY(0%);}
+    25% {transform: translateY(-3%);}
+    50% {transform: translateY(0%);}
+    75% {transform: translateY(3%);}
+    100% {transform: translateY(0);}
+  }
 
 .form__button_margin_top {
     margin: 221px 0 0 0;
