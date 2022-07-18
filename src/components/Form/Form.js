@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, NavLink } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import './Form.css';
 
 function Form() {
@@ -18,9 +18,9 @@ function Form() {
                     </form>
                     <div className='form__wrap'>
                         <p className='form__text register__text_color_grey'> Уже зарегистрированы? </p>
-                        <NavLink to="/signin" className="link-login">
+                        <Link to="/signin" className="link-login">
                             <p className='form__text form__text_color_blue'> Войти </p>
-                        </NavLink>
+                        </Link>
                     </div>
                 </Route>
 
@@ -34,9 +34,9 @@ function Form() {
                     </form>
                     <div className='form__wrap'>
                         <p className='form__text register__text_color_grey'> Ещё не зарегистрированы? </p>
-                        <NavLink to="/signup" className="link-login">
+                        <Link to="/signup" className="link-login">
                             <p className='form__text form__text_color_blue'> Регистрация </p>
-                        </NavLink>
+                        </Link>
                     </div>
                 </Route>
             </Switch>

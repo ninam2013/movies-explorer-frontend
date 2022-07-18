@@ -1,0 +1,30 @@
+.button-profile {
+    display: flex;    
+    width: auto;   
+    height: 32px;   
+    border-radius: 40px;
+    box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
+    align-items: center;
+    padding: 0 3px 0 11px;
+    margin: 0;
+}
+
+.pic-background {
+    display: flex;
+    width: 26px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 0 7px;
+    background-color: #F9F9F9;
+    border-radius: 50%;  
+}
+
+.account-text {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 12px;
+    color: #000;  
+    margin: 0;
+    padding: 0;
+}

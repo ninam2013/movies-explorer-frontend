@@ -1,0 +1,130 @@
+.profile {
+    display: flex;
+    width: 1280px;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 74px 0 70px 0;
+}
+
+.profile__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.profile__wrap {
+    display: flex;
+    width: 410px;     
+}
+
+.profile__wrap_padding_top {
+    padding: 123px 0 0 0;
+}
+
+.profile__wrap_border_bottom {
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.profile__label {
+    width: 100%;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    margin: 0;    
+}
+
+.profile__label_padding_top {
+    padding: 18px 0 0 0;
+}
+
+.profile__label_padding_bottom {
+    padding: 0 0 16px 0;
+}
+
+.profile__input {
+    width: 90%;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    text-align: end;
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+
+.profile__link {
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000;
+    margin: 220px 0 0 0;
+    padding: 0;
+    transition: opacity .3s;
+}
+
+.profile__link:hover {
+    opacity: .7;
+}
+
+.profile__link_color_red {
+    color: #FF3055;
+    font-weight: 500;
+}
+
+.profile__link_margin_top {
+    margin: 16px 0 0 0;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279.9px) {
+    .profile {      
+        width: 768px;   
+        padding: 236px 0 269px 0;
+    }
+
+    .profile__link {        
+        margin: 210px 0 0 0;        
+    }
+
+    .profile__link_margin_top {
+        margin: 16px 0 0 0;
+    }
+       
+    .profile__wrap_padding_top {
+        padding: 96px 0 0 0;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767.9px) {
+    .profile {   
+        width: 320px;       
+        padding: 70px 0 40px 0;
+    }
+    
+    .profile__wrap {        
+        width: 260px;     
+    }
+    
+    .profile__wrap_padding_top {
+        padding: 80px 0 0 0;
+    }  
+
+    .profile__input {
+        width: 87%;       
+    }
+
+    .profile__link {        
+        font-size: 12px;
+        line-height: 15px;    
+        margin: 379px 0 0 0;        
+    } 
+
+    .profile__link_margin_top {
+        margin: 16px 0 0 0;
+    }
+}
