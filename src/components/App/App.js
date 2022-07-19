@@ -9,6 +9,7 @@ import Login from '../Login/Login';
 import Error from '../Error/Error';
 import Profile from '../Profile/Profile';
 import Menu from '../Menu/Menu';
+import Movies from '../Movies/Movies';
 
 
 function App() {
@@ -43,7 +44,7 @@ function closeMenu(){
           <Profile />
         </Route>
         <Route path="/movies">
-          <p>Movies</p>
+          <Movies />
         </Route>
         <Route path="/error">
           <Error />
