@@ -6,7 +6,7 @@ import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
-import Error from '../Error/Error';
+import PageNotFound from '../PageNotFound/PageNotFound';
 import Profile from '../Profile/Profile';
 import Menu from '../Menu/Menu';
 import Movies from '../Movies/Movies';
@@ -46,11 +46,11 @@ function closeMenu(){
         <Route path="/movies">
           <Movies />
         </Route>
-        <Route path="/error">
-          <Error />
+        <Route path="*">
+          <PageNotFound />
         </Route>
       </Switch>
-      <Footer />
+      <Footer pathname={location.pathname} />
       <Menu closeMenu={closeMenu} active = {menuActive} />
     </div>
   );

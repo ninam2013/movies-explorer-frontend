@@ -50,6 +50,11 @@
     line-height: 18px;
     border: none;
     cursor: pointer;
+    transition: all .3s;
+}
+
+.search-form__button:hover {
+    opacity: .6;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {

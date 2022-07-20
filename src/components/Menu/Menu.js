@@ -5,7 +5,7 @@ import { menuContent } from '../../utils/constants';
 import Account from '../Account/Account';
 
 
-function Menu({ closeMenu, active }) {
+function Menu({ closeMenu, active }) {  
     return (
         <nav className={active ? 'menu active' : 'menu'} >
             <div className='blackout'></div>
