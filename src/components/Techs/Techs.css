@@ -108,6 +108,7 @@
     .techs__text {
         font-size: 11px;
         line-height: 16px;
+        letter-spacing: -0.04em;
     }
 
     .techs__text_align_center {
