@@ -1,7 +1,7 @@
 .promo {
-    display: flex;  
+    display: flex;
     padding: 75px 70px;
-    background-color: #073042;   
+    background-color: #073042;
     justify-content: space-between;
 }
 
@@ -10,11 +10,11 @@
     font-style: normal;
     font-weight: 400;
     font-size: 50px;
-    line-height: 58px;   
+    line-height: 58px;
     color: #FFF;
-    -webkit-text-stroke: 1px #000;  
+    -webkit-text-stroke: 1px #000;
     margin: 0;
-    padding: 0;    
+    padding: 0;
 }
 
 .promo__text {
@@ -33,16 +33,15 @@
     height: 36px;
     border: 1px solid #FFF;
     border-radius: 3px;
-    background-color: transparent;
     align-items: center;
     justify-content: center;
     margin: 146px 0 0 0;
-    cursor: pointer;
     color: #FFF;
     font-weight: 500;
     font-size: 12px;
     line-height: 16px;
-    padding: 0;    
+    padding: 0;
+    text-decoration: none;
 }
 
 .promo__button:hover {
@@ -50,12 +49,26 @@
 }
 
 @keyframes button {
-    0% {transform: translateY(0%);}
-    25% {transform: translateY(-3%);}
-    50% {transform: translateY(0%);}
-    75% {transform: translateY(3%);}
-    100% {transform: translateY(0);}
-  }
+    0% {
+        transform: translateY(0%);
+    }
+
+    25% {
+        transform: translateY(-3%);
+    }
+
+    50% {
+        transform: translateY(0%);
+    }
+
+    75% {
+        transform: translateY(3%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
 
 .planet-img {
     width: 310px;
@@ -64,13 +77,13 @@
 
 
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {
-    .promo {      
-        flex-direction: column;       
-        padding: 140px 30px 76px;       
-        justify-content: flex-start;       
+    .promo {
+        flex-direction: column;
+        padding: 140px 30px 76px;
+        justify-content: flex-start;
     }
 
-    .promo__description { 
+    .promo__description {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -80,38 +93,38 @@
 
     .promo__title {
         width: 680px;
-        font-style: normal;        
+        font-style: normal;
         font-size: 40px;
-        line-height: 50px;        
+        line-height: 50px;
         text-align: center;
         margin-top: 50px;
     }
 
     .promo__text {
-        width: 260px;        
-        margin: 20px 0 0 0; 
-        text-align: center;      
+        width: 260px;
+        margin: 20px 0 0 0;
+        text-align: center;
     }
 
-    .promo__button {        
-        margin-top: 92px;        
+    .promo__button {
+        margin-top: 92px;
     }
 
     .promo__img {
         display: flex;
-        justify-content: center;        
+        justify-content: center;
         order: 1;
     }
 }
 
 @media screen and (min-width: 320px) and (max-width: 767.9px) {
-    .promo {      
-        flex-direction: column;       
-        padding: 70px 14px 30px;       
-        justify-content: flex-start;       
+    .promo {
+        flex-direction: column;
+        padding: 70px 14px 30px;
+        justify-content: flex-start;
     }
 
-    .promo__description { 
+    .promo__description {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -121,26 +134,26 @@
 
     .promo__title {
         width: 307px;
-        font-style: normal;        
+        font-style: normal;
         font-size: 30px;
-        line-height: 38px;        
+        line-height: 38px;
         text-align: center;
         margin-top: 44px;
     }
 
     .promo__text {
-        width: 260px;        
-        margin: 24px 0 0 0; 
-        text-align: center;      
+        width: 260px;
+        margin: 24px 0 0 0;
+        text-align: center;
     }
 
-    .promo__button {        
-        margin: 80px 0 0 0;        
+    .promo__button {
+        margin: 80px 0 0 0;
     }
 
     .promo__img {
         display: flex;
-        justify-content: center;       
+        justify-content: center;
         order: 1;
     }
 
@@ -148,5 +161,5 @@
         width: 210px;
         height: 206px;
     }
-    
+
 }

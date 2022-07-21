@@ -6,7 +6,7 @@
 
 .about-me__container {
     display: flex;
-    padding: 66px 0 0 0;  
+    padding: 66px 0 0 0;
 }
 
 .about-me__brief {
@@ -44,7 +44,7 @@
 .about-me__avatar {
     display: flex;
     width: 47%;
-    justify-content: flex-end;    
+    justify-content: flex-end;
 }
 
 .about-me__face {
@@ -64,13 +64,14 @@
 .no-dot:last-child {
     margin: 0;
 }
+
 .application-link {
-    text-decoration: none;   
+    text-decoration: none;
     color: #000;
     font-weight: 500;
     font-size: 14px;
-    line-height: 17px;   
-    transition: opacity .3s ;
+    line-height: 17px;
+    transition: opacity .3s;
 }
 
 .application-link:hover {
@@ -78,91 +79,91 @@
 }
 
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {
-    .about-me {      
+    .about-me {
         padding: 90px 50px;
-    }   
-    
+    }
+
     .about-me__brief {
-        width: 57%;        
+        width: 57%;
     }
-    
-    .about-me__title {     
+
+    .about-me__title {
         font-size: 40px;
-        line-height: 40px;     
+        line-height: 40px;
     }
-    
+
     .about-me__subtitle {
         font-size: 12px;
-        line-height: 18px;        
+        line-height: 18px;
         padding: 16px 0 0 0;
     }
-    
-    .about-me__text {        
+
+    .about-me__text {
         font-size: 12px;
-        line-height: 18px;       
+        line-height: 18px;
         padding: 20px 0 0 0;
     }
-    
-    .about-me__avatar {   
-        width: 43%;       
+
+    .about-me__avatar {
+        width: 43%;
     }
-    
+
     .about-me__face {
-        width: 255px;    
-    }    
+        width: 255px;
+    }
 }
 
 @media screen and (min-width: 320px) and (max-width: 767.9px) {
-    .about-me {        
+    .about-me {
         padding: 60px 14px 70px;
     }
-    
-    .about-me__container {      
+
+    .about-me__container {
         flex-direction: column;
-        padding: 60px 0 0 0;  
+        padding: 60px 0 0 0;
     }
-    
-    .about-me__brief {   
-        width: 100%;   
-        flex-direction: column;    
-        justify-content: start;  
-        order: 2;    
+
+    .about-me__brief {
+        width: 100%;
+        flex-direction: column;
+        justify-content: start;
+        order: 2;
         padding: 40px 0 0 0;
     }
-    
-    .about-me__title {    
+
+    .about-me__title {
         font-size: 30px;
-        line-height: 36px;   
+        line-height: 36px;
     }
-    
-    .about-me__subtitle { 
+
+    .about-me__subtitle {
         font-size: 11px;
         line-height: 16px;
         padding: 20px 0 0 0;
     }
-    
+
     .about-me__text {
         font-size: 11px;
         line-height: 16px;
         padding: 20px 0 0 0;
     }
-    
-    .about-me__avatar {  
+
+    .about-me__avatar {
         width: 100%;
-        justify-content: center;      
-        order: 1;   
+        justify-content: center;
+        order: 1;
     }
-  
+
     .about-me__face {
-        width: 292px;    
+        width: 292px;
     }
- 
-    .about-me__link {      
+
+    .about-me__link {
         padding: 40px 0 0 0;
     }
 
-    .no-dot {       
+    .no-dot {
         margin: 0 26px 0 0;
-    } 
-    
+    }
+
 }

@@ -24,6 +24,10 @@
     transition: all .3s;
 }
 
+.movies-card-list__buttom_visibility_hidden {
+    visibility: hidden;
+}
+
 .movies-card-list__buttom:hover {
     background: #3456F3;
     color: #FFF;
@@ -49,5 +53,10 @@
     .movies-card-list__buttom {
         width: 240px;
         margin: 70px 0 80px 0;
+    }
+
+    .movies-card-list__buttom_visibility_hidden {
+        visibility: hidden;
+        margin: 45px 0 80px 0;
     }
 }

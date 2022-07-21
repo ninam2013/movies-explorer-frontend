@@ -6,7 +6,6 @@ import face from '../../images/face.jpg';
 
 function AboutMe() {
 
-
     return (
         <section className='about-me'>
             < Headline title={"Студент"} />
@@ -27,7 +26,7 @@ function AboutMe() {
                 <div className='about-me__avatar'>
                     <img src={face} className="about-me__face" alt="лицо" />
                 </div>
-            </div>            
+            </div>
         </section>
     );
 }

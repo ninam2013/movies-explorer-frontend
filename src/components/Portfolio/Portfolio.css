@@ -19,12 +19,12 @@
 .site-link {
     width: 100%;
     text-decoration: none;
-    color: #000;  
-    transition: opacity .3s ; 
+    color: #000;
+    transition: opacity .3s;
 }
 
 .site-link:hover {
-    opacity: .6; 
+    opacity: .6;
 }
 
 .box-list {
@@ -46,36 +46,37 @@
     line-height: 50px;
     letter-spacing: -0.04em;
     margin: 0;
-    padding: 20px 0 19px 0;    
+    padding: 20px 0 19px 0;
 }
 
 .site-info_padding-bottom_none {
-    padding: 20px 0 0 0; 
+    padding: 20px 0 0 0;
 }
 
 .site-info_padding-top_none {
-    padding: 0 0 19px 0; 
-} 
+    padding: 0 0 19px 0;
+}
+
 .arrow {
-    position: absolute; 
+    position: absolute;
     width: 15px;
     height: 15px;
-    top: 40px; 
+    top: 40px;
     right: 0px;
     border-top: 3px solid #000;
     border-right: 3px solid #000;
 }
-    
+
 .arrow:after {
-    content: ""; 
-    position: absolute; 
-    width: 30px; 
-    height: 3px; 
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 3px;
     top: 8px;
     right: -6px;
     background: #000;
 }
-    
+
 .arrow:after {
     transform: rotate(-45deg);
 }
@@ -83,51 +84,51 @@
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {
     .portfolio {
         padding: 0 50px 90px;
-    }  
-    
-    .site-info {     
-        font-size: 28px; 
-    } 
+    }
+
+    .site-info {
+        font-size: 28px;
+    }
 }
 
 @media screen and (min-width: 320px) and (max-width: 767.9px) {
     .portfolio {
         padding: 0 14px 70px;
     }
-    
-    .portfolio__subtitle {      
-        font-size: 14px;    
+
+    .portfolio__subtitle {
+        font-size: 14px;
     }
-    
+
     .portfolio__wrap {
         padding: 40px 0 0 0;
-    }    
-    
+    }
+
     .site-info {
         font-size: 18px;
-        line-height: 28px; 
+        line-height: 28px;
     }
-    
-    .arrow { 
+
+    .arrow {
         width: 10px;
         height: 10px;
-        top: 30px;   
+        top: 30px;
         border-top: 2px solid #000;
-        border-right: 2px solid #000;     
+        border-right: 2px solid #000;
     }
-        
-    .arrow:after {        
-        width: 15px; 
-        height: 2px;        
+
+    .arrow:after {
+        width: 15px;
+        height: 2px;
         top: 3px;
-        right: -3px;     
+        right: -3px;
     }
-        
+
     .arrow:after {
         transform: rotate(-45deg);
     }
 
-    .arrow_top_change { 
-        top: 10px; 
+    .arrow_top_change {
+        top: 10px;
     }
 }

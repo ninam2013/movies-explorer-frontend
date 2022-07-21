@@ -5,7 +5,7 @@ import logo from '../../images/logo.svg';
 import Navigation from '../Navigation/Navigation';
 
 
-function Header({ pathname, openMenu }) { 
+function Header({ pathname, openMenu }) {
   const headerClassName = (
     `header 
       ${(pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile') && 'header_background_white'}
@@ -14,35 +14,35 @@ function Header({ pathname, openMenu }) {
   )
 
   let header;
-    if(pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile'){
-      header = (<Navigation openMenu={openMenu} />)
-    }
-    if(pathname === '/signup'){
-      header = ( <h1 className='header__title'>Добро пожаловать!</h1> )              
-    }
-    if(pathname === '/signin'){
-      header = ( <h1 className='header__title'>Рады видеть!</h1> )              
-    } 
-    
-  return (  
-      <header className={headerClassName}>
-        <NavLink to="/" className="link">
-          <img src={logo} className="header__logo" alt="logo" />
-        </NavLink>
-        {pathname === '/' ?
-          <nav className="header__container-registration">
-            <NavLink to="/signup" className="link">
-              <p className="registration-text">Регистрация</p>
-            </NavLink>
-            <NavLink to="/signin" className="link">
-              <div className='button-green'>
-                <p className="registration-text registration-text_color_black">Войти</p>
-              </div>
-            </NavLink>
-          </nav> :
-          header          
-        }
-      </header>        
+  if (pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile') {
+    header = (<Navigation openMenu={openMenu} />)
+  }
+  if (pathname === '/signup') {
+    header = (<h1 className='header__title'>Добро пожаловать!</h1>)
+  }
+  if (pathname === '/signin') {
+    header = (<h1 className='header__title'>Рады видеть!</h1>)
+  }
+
+  return (
+    <header className={headerClassName}>
+      <NavLink to="/" className="link">
+        <img src={logo} className="header__logo" alt="logo" />
+      </NavLink>
+      {pathname === '/' ?
+        <nav className="header__container-registration">
+          <NavLink to="/signup" className="link">
+            <p className="registration-text">Регистрация</p>
+          </NavLink>
+          <NavLink to="/signin" className="link">
+            <div className='button-green'>
+              <p className="registration-text registration-text_color_black">Войти</p>
+            </div>
+          </NavLink>
+        </nav> :
+        header
+      }
+    </header>
   );
 }
 

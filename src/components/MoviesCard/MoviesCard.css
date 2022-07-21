@@ -53,6 +53,11 @@
     background-image: url(../../images/heart-red.svg);
 }
 
+.movies-card__button_cross {
+    background-image: url(../../images/cross.svg);
+    background-repeat: no-repeat;
+}
+
 .movies-card__box-img {
     width: 220px;
     height: 122px;
@@ -60,8 +65,6 @@
     align-self: center;
     padding-right: 6px;
 }
-
-
 
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {
     .movies-card:first-child {

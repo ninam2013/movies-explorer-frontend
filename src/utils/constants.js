@@ -9,4 +9,4 @@ export const cardContent = [
     { title: 'Бег это свобода', time: '1ч 42м', img: './images/card5.png', id: '05' },
     { title: 'Книготорговцы', time: '1ч 42м', img: './images/card6.png', id: '06' },
     { title: 'Когда я думаю о Германии ночью', time: '1ч 42м', img: './images/card7.png', id: '07' }
-]
+];

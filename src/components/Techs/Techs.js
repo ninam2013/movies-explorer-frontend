@@ -6,8 +6,8 @@ function Techs() {
 
 
     return (
-        <section className='techs'>        
-            < Headline title = {"Технологии"}/>
+        <section className='techs'>
+            < Headline title={"Технологии"} />
             <h2 className='techs__subtitle techs__subtitle_padding_set'>7 технологий</h2>
             <div className='techs__wrap'>
                 <p className='techs__text techs__text_align_center'>На курсе веб-разработки мы освоили технологии, которые применили в дипломном проекте.</p>

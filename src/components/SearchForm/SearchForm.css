@@ -8,7 +8,7 @@
     height: 72px;
     background: #FDFDFD;
     box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
-    border-radius: 9px;    
+    border-radius: 9px;
     align-items: center;
 }
 
@@ -22,21 +22,21 @@
 }
 
 .search-form__input {
-    width: 807px;   
+    width: 807px;
     font-weight: 400;
     font-size: 18px;
     line-height: 20px;
     margin: 0;
     padding: 0;
     border: none;
-    outline: none;   
-    text-indent: 32px; 
+    outline: none;
+    text-indent: 32px;
 }
 
 .search-form__input::placeholder {
     background-image: url(../../images/icon.svg);
-    background-repeat: no-repeat;   
-    background-position: left;   
+    background-repeat: no-repeat;
+    background-position: left;
 }
 
 .search-form__button {
@@ -61,13 +61,13 @@
     .search-form {
         padding: 80px 30px 109px;
     }
-    
+
     .search-form__search {
-        width: 500px;   
+        width: 500px;
     }
-    
+
     .search-form__input {
-        width: 395px;      
+        width: 395px;
     }
 }
 
@@ -75,34 +75,34 @@
     .search-form {
         padding: 80px 10px 45px;
     }
-    
-    .search-form__wrap {   
-        flex-direction: column;    
-        height: 136px;       
+
+    .search-form__wrap {
+        flex-direction: column;
+        height: 136px;
         box-shadow: none;
-        border-radius: 0;        
+        border-radius: 0;
     }
-    
-    .search-form__search {    
+
+    .search-form__search {
         width: 300px;
         height: 72px;
         box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
-        border-radius: 9px;         
+        border-radius: 9px;
         border-right: none;
         padding-left: 0;
     }
-    
+
     .search-form__input {
-        width: 222px;           
+        width: 222px;
         font-size: 14px;
-        line-height: 20px;       
-        text-indent: 19px; 
+        line-height: 20px;
+        text-indent: 19px;
     }
-    
-    .search-form__input::placeholder {        
+
+    .search-form__input::placeholder {
         background-image: none;
-        background-repeat: none;   
-        background-position: left;   
-    }    
-    
+        background-repeat: none;
+        background-position: left;
+    }
+
 }
