@@ -101,9 +101,9 @@
         padding: 8px 0 14px 0;
     }
 
-    .movies-card__box-img {
-        width: 300px;
-        height: 168px;
+    .movies-card__box-img {     
+        width: 100%;
+        height: auto;
         padding-right: 0px;
         order: 1;
     }

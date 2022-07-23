@@ -7,10 +7,10 @@ function SearchForm() {
     return (
         <section className='search-form'>
             <div className='search-form__wrap'>
-                <div className='search-form__search'>
-                    <input type="text" className="search-form__input" placeholder="Фильм" />
-                    <button className='search-form__button' type='button'>Найти</button>
-                </div>
+                <form className='search-form__search'>
+                    <input type="text" className="search-form__input" placeholder="Фильм" required />
+                    <button className='search-form__button' type='submit'>Найти</button>
+                </form>
                 <FilterCheckbox />
             </div>
         </section>

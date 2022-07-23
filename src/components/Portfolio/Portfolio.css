@@ -81,6 +81,10 @@
     transform: rotate(-45deg);
 }
 
+.arrow_top_change {
+    top: 10px;
+}
+
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {
     .portfolio {
         padding: 0 50px 90px;
@@ -127,8 +131,5 @@
     .arrow:after {
         transform: rotate(-45deg);
     }
-
-    .arrow_top_change {
-        top: 10px;
-    }
+    
 }
