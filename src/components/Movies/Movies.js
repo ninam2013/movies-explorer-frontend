@@ -3,11 +3,15 @@ import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-function Movies({ pathname, amountCards }) {
+function Movies({ pathname, amountCards, handleFormSubmit, cards, handleInputChange }) {
     return (
         <section className='movies'>
-            <SearchForm />
-            <MoviesCardList pathname={pathname} amountCards={amountCards} />
+            <SearchForm handleFormSubmit={handleFormSubmit} handleInputChange={handleInputChange} />
+            <MoviesCardList
+                pathname={pathname}
+                amountCards={amountCards}
+                cards={cards}
+            />
         </section>
     )
 }

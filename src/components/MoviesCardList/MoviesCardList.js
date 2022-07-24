@@ -2,15 +2,23 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { cardContent } from '../../utils/constants';
 
 
-function MoviesCardList({ amountCards }) {
+
+function MoviesCardList({ amountCards, cards }) {
     const loc = useLocation();
+
     return (
         <section className='movies-card-list'>
-            {cardContent.slice(0, amountCards).map(item =>
-                <MoviesCard title={item.title} time={item.time} src={item.src} img={item.img} key={item.id} pathname={loc.pathname} />)
+            {cards.slice(0, amountCards).map(item =>
+                <MoviesCard
+                    title={item.title}
+                    time={item.time}
+                    src={item.src}
+                    img={item.img}
+                    key={item.id}
+                    pathname={loc.pathname}
+                />)
             }
 
             {loc.pathname === '/movies' ?

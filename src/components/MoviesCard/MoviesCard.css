@@ -66,6 +66,10 @@
     padding-right: 6px;
 }
 
+.movies-card__img {
+    width: 100%;
+}
+
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {
     .movies-card:first-child {
         margin-top: 70px;
@@ -106,9 +110,5 @@
         height: auto;
         padding-right: 0px;
         order: 1;
-    }
-
-    .movies-card__img {
-        width: 100%;
     }
 }
