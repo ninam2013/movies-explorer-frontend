@@ -21,8 +21,9 @@ function App() {
   const [amountCards, setAmountCards] = useState(0);
   const [cards, setCards] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  // const [errorText, setErrorText] = useState(false);
 
-// console.log('cards', cards);
 
   useEffect(() => {
     changeWidth(window.innerWidth)
@@ -35,8 +36,9 @@ function App() {
   });
 
   // вывод карточек по запросу
-  useEffect(() => { 
-    if(searchText.length > 0){   
+  useEffect(() => {        
+    if(searchText && searchText.length > 0){
+      setIsLoading(true);   
     moviesApi.getMoviesBeatfilm(searchText)
       .then((res) => {
         const dataCards = res.map(card => {
@@ -51,12 +53,10 @@ function App() {
             img: BASE_URL_MOVIE + card.image.url,
             id: card.id,
           }
-        }); 
+        })        
         setCards(dataCards);
       })
-      .catch((err) => {
-        console.log('Ошибка. Запрос не выполнен');
-      });
+      .finally(()=> setIsLoading(false));   
     } 
     setCards([]);
     
@@ -72,37 +72,32 @@ function App() {
 
   // вывод количество карточек
   function changeWidth(changeScreen) {
-    if ((changeScreen >= 320 && changeScreen < 767) && location.pathname === '/movies') {
+    if ((changeScreen >= 320 && changeScreen < 480) && location.pathname === '/movies') {
       setAmountCards(5);
     }
-    if ((changeScreen >= 320 && changeScreen < 767) && location.pathname === '/saved-movies') {
-      setAmountCards(2);
+    if ((changeScreen >= 320 && changeScreen < 480) && location.pathname === '/saved-movies') {
+      setAmountCards(5);
     }
-    if ((changeScreen >= 768 && changeScreen < 1279) && location.pathname === '/movies') {
-      setAmountCards(7);
+    if ((changeScreen >= 480 && changeScreen < 1279) && location.pathname === '/movies') {
+      setAmountCards(8);
     }
-    if ((changeScreen >= 768 && changeScreen < 1279) && location.pathname === '/saved-movies') {
-      setAmountCards(3);
+    if ((changeScreen >= 480 && changeScreen < 1279) && location.pathname === '/saved-movies') {
+      setAmountCards(8);
     }
     if ((changeScreen >= 1280) && location.pathname === '/movies') {
-      setAmountCards(7);
+      setAmountCards(12);
     }
     if ((changeScreen >= 1280) && location.pathname === '/saved-movies') {
-      setAmountCards(3);
+      setAmountCards(12);
     }
   };
 
 
   const handleFormSubmit = (e) => {
-    e.preventDefault(); 
-    setSearchText(e.target[0].value)
+    e.preventDefault();     
+    setSearchText(e.target[0].value);     
   }
 
-  // запись текста в state с input
-  // const handleInputChange = (e) => {   
-  //   setSearchText(e.target.value)
-  // }
-console.log(searchText);
   return (
     <div className="page">
       <Header
@@ -128,11 +123,16 @@ console.log(searchText);
             amountCards={amountCards}
             handleFormSubmit={handleFormSubmit}
             cards={cards}
-            // handleInputChange={handleInputChange}
+            isLoading={isLoading}          
           />
         </Route>
         <Route path="/saved-movies">
-          <SavedMovies amountCards={amountCards} />
+          <SavedMovies 
+          amountCards={amountCards}
+          handleFormSubmit={handleFormSubmit}
+          cards={cards}
+          isLoading={isLoading} 
+          />
         </Route>
         <Route path="*">
           <PageNotFound />

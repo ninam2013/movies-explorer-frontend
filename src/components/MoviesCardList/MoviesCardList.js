@@ -9,15 +9,14 @@ function MoviesCardList({ amountCards, cards }) {
     const loc = useLocation();
 
     return (
-        <section className='movies-card-list'>
+        <section className='movies-card-list'>            
             {cards.slice(0, amountCards).map(item =>
                 <MoviesCard
                     title={item.title}
-                    time={item.time}
-                    src={item.src}
+                    time={item.time}                    
                     img={item.img}
                     key={item.id}
-                    pathname={loc.pathname}
+                    pathname={loc.pathname}                    
                 />)
             }
 

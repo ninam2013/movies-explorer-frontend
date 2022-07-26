@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './MoviesCard.css';
 
 
-function MoviesCard({ title, time, img, pathname }) {
+function MoviesCard({ title, time, img, pathname, }) {
     const [like, setLike] = useState(false);
 
     function toggleLike() {
@@ -19,7 +19,7 @@ function MoviesCard({ title, time, img, pathname }) {
                 {pathname === '/movies' ?
                     <button className={like ? 'movies-card__button movies-card__button_active' : 'movies-card__button'} onClick={toggleLike}></button> :
                     <button className='movies-card__button movies-card__button_cross'></button>
-                }
+                }                
             </div>
             <div className='movies-card__box-img'>
                 <img className='movies-card__img' src={img} alt={title} />

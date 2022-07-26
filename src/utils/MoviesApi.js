@@ -6,15 +6,20 @@ class MoviesApi {
         this._headers = headers;
     }
 
+    //получение ответа от сервера
+  _getResponse(res) {
+    if (res.ok) {
+      return res.json()
+    } else {
+      return Promise.reject(`Ошибка: ${res.status}`)
+    }
+  }
+
     getMoviesBeatfilm() {
         return fetch(this._baseUrl, {
             headers: this._headers
         })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-            })
+        .then(this._getResponse)            
     }
 }
 
