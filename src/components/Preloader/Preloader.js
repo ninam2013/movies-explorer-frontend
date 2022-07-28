@@ -4,7 +4,7 @@ import './Preloader.css';
 
 function Preloader() {
     return (
-        <section className='preloader'>Загрузка...</section>
+        <section className='preloader'></section>
     )
 }
 

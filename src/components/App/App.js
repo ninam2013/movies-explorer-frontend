@@ -17,18 +17,29 @@ import { BASE_URL_MOVIE } from '../../utils/constants'
 
 function App() {
   const location = useLocation();
+  // активация мобильного меню
   const [menuActive, setMenuActive] = useState(false);
+  // кол-во карточек при определенном разрешении
   const [amountCards, setAmountCards] = useState(0);
+  // все карточки
   const [cards, setCards] = useState([]);
+  // сохраненные карточки
+  const [savedCards, setsavedCards] = useState([]);
+  // значение инпута
   const [searchText, setSearchText] = useState('');
+  // загрузка карточек(прелоадер)
   const [isLoading, setIsLoading] = useState(false);
+  //сохранение понравившихся карточек
+  const [saveCardData, setSaveCardData] = useState([]);
   // const [errorText, setErrorText] = useState(false);
 
 
+  // при изменении пути странички вызывается функция changeWidth 
   useEffect(() => {
     changeWidth(window.innerWidth)
   }, [location.pathname]);
 
+  // при изменении разрешения окна меняется кол-во карточек 
   useEffect(() => {
     window.onresize = function () {
       changeWidth(window.innerWidth)
@@ -36,41 +47,43 @@ function App() {
   });
 
   // вывод карточек по запросу
-  useEffect(() => {        
-    if(searchText && searchText.length > 0){
-      setIsLoading(true);   
-    moviesApi.getMoviesBeatfilm(searchText)
-      .then((res) => {
-        const dataCards = res.map(card => {
-          function translateTime(v) {
-            let hours = Math.trunc(v / 60);
-            let minutes = v % 60;
-            return hours + 'ч ' + minutes + 'м';
-          };
-          return {
-            title: card.nameRU,
-            time: translateTime(card.duration),
-            img: BASE_URL_MOVIE + card.image.url,
-            id: card.id,
-          }
-        })        
-        setCards(dataCards);
-      })
-      .finally(()=> setIsLoading(false));   
-    } 
+  useEffect(() => {
+    if (searchText && searchText.length > 0) {
+      setIsLoading(true);
+      moviesApi.getMoviesBeatfilm()
+        .then((res) => {
+          const dataCards = res.map(card => {
+            function translateTime(v) {
+              let hours = Math.trunc(v / 60);
+              let minutes = v % 60;
+              return hours + 'ч ' + minutes + 'м';
+            };
+            return {
+              title: card.nameRU,
+              time: translateTime(card.duration),
+              img: BASE_URL_MOVIE + card.image.url,
+              id: card.id,
+            }
+          })
+          setCards(dataCards);
+        })
+        .finally(() => setIsLoading(false));
+    }
     setCards([]);
-    
+
   }, [searchText]);
 
+  // открыть мобильное меню
   function openMenu() {
     setMenuActive(true)
   };
 
+  // закрыть мобильное меню
   function closeMenu() {
     setMenuActive(false)
   };
 
-  // вывод количество карточек
+  // вывод количества карточек в зависимости от разрешения экрана
   function changeWidth(changeScreen) {
     if ((changeScreen >= 320 && changeScreen < 480) && location.pathname === '/movies') {
       setAmountCards(5);
@@ -92,11 +105,24 @@ function App() {
     }
   };
 
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();     
-    setSearchText(e.target[0].value);     
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSearchText(e.target[0].value);
   }
+
+  // поиск по названию фильма
+  const getFilterСards = cards.filter(card => {
+    return card.title.toLowerCase().includes(searchText.toLowerCase())
+  });
+
+  // сохранение данных определенной карточки
+  function getSavedCards(id, title, time, img) {
+    if (!saveCardData.some(item => item === id) || saveCardData === []) {
+      saveCardData.push({ id, title, time, img });
+    }
+  }
+
+
 
   return (
     <div className="page">
@@ -121,17 +147,18 @@ function App() {
           <Movies
             pathname={location.pathname}
             amountCards={amountCards}
-            handleFormSubmit={handleFormSubmit}
+            handleSubmit={handleSubmit}
             cards={cards}
-            isLoading={isLoading}          
+            getFilterСards={getFilterСards}
+            getSavedCards={getSavedCards}
+            isLoading={isLoading}
           />
         </Route>
         <Route path="/saved-movies">
-          <SavedMovies 
-          amountCards={amountCards}
-          handleFormSubmit={handleFormSubmit}
-          cards={cards}
-          isLoading={isLoading} 
+          <SavedMovies
+            amountCards={amountCards}            
+            isLoading={isLoading}
+            saveCardData={saveCardData}
           />
         </Route>
         <Route path="*">

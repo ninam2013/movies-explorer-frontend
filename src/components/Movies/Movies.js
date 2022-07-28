@@ -3,14 +3,20 @@ import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-function Movies({ pathname, amountCards, handleFormSubmit, cards, isLoading }) {
+function Movies({ pathname, amountCards, handleSubmit, getFilterСards, isLoading, getSavedCards, cardId }) {
     return (
         <section className='movies'>
-            <SearchForm handleFormSubmit={handleFormSubmit} isLoading={isLoading} />
+            <SearchForm 
+                handleSubmit={handleSubmit}        
+                isLoading={isLoading} 
+                getFilterСards={getFilterСards} 
+            />
             <MoviesCardList
                 pathname={pathname}
-                amountCards={amountCards}
-                cards={cards}               
+                amountCards={amountCards}             
+                getFilterСards={getFilterСards} 
+                getSavedCards={getSavedCards}
+                cardId={cardId}                                   
             />
         </section>
     )

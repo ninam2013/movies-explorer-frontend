@@ -5,19 +5,30 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 
 
 
-function MoviesCardList({ amountCards, cards }) {
+function MoviesCardList({ amountCards, getFilterСards, getSavedCards, saveCardData }) {
     const loc = useLocation();
-
+ 
     return (
         <section className='movies-card-list'>            
-            {cards.slice(0, amountCards).map(item =>
+            {loc.pathname === '/movies' ?
+            getFilterСards.slice(0, amountCards).map(item =>
                 <MoviesCard
                     title={item.title}
                     time={item.time}                    
                     img={item.img}
+                    id={item.id}
                     key={item.id}
-                    pathname={loc.pathname}                    
-                />)
+                    pathname={loc.pathname}
+                    getSavedCards={getSavedCards}                                    
+                />):                
+                saveCardData.slice(0, amountCards).map(item =>
+                    <MoviesCard
+                        title={item.title}
+                        time={item.time}                    
+                        img={item.img}
+                        key={item.id}
+                        pathname={loc.pathname}                    
+                    />)
             }
 
             {loc.pathname === '/movies' ?

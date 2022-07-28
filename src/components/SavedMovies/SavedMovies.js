@@ -4,11 +4,11 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
 
-function SavedMovies({ amountCards, cards, handleFormSubmit, isLoading }) {
+function SavedMovies({ amountCards, isLoading, saveCardData }) {
     return (
         <section className='saved-movies'>
-            <SearchForm handleFormSubmit={handleFormSubmit} isLoading={isLoading} />
-            <MoviesCardList amountCards={amountCards} cards={cards} />
+            <SearchForm isLoading={isLoading} />
+            <MoviesCardList amountCards={amountCards} saveCardData={saveCardData}   />
         </section>
     )
 }

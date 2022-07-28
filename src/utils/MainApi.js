@@ -1,56 +1,17 @@
-// export default fetch('https://api.nomoreparties.co/beatfilm-movies', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json'
-//   },
-//   body: JSON.stringify({
-//     nameRU: 'Роллинг Стоунз'
-//   })
-//   .then((res) => {
-//     console.log(res); // если всё хорошо, получили ответ
-//   })
-//   .catch((err) => {
-//     console.log('Ошибка. Запрос не выполнен');
-//   })
-// });
-// class MainApi {
-//     constructor({ baseUrl, headers }) {
-//         this._baseUrl = baseUrl;
-//         this._headers = headers;
-//     }
-
-//     zapros() {
-//         fetch(this._baseUrl, {
-//             headers: this._headers
-//         })
-//             .then((res) => {
-//                 res.json();
-//                 // console.log('res==', res); // если всё хорошо, получили ответ
-//             })
-//             .catch((err) => {
-//                 console.log('Ошибка. Запрос не выполнен');
-//             });
-//     }
-
-// }
-
-
-// export const mainApi = new MainApi({
-//     baseUrl: 'https://api.nomoreparties.co/beatfilm-movies',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     }
-// });
+import { BASE_URL_SITE } from '../utils/constants'
 
 class MainApi {
     constructor({ baseUrl }) {
       this.baseUrl = baseUrl;
     }
   
+    getCardsRequest(){
+      
+    }
     
 }
 const mainApi = new MainApi({
-    // baseUrl: "https://maninep.nomoreparties.sbs"
+    // baseUrl: BASE_URL_SITE;
     baseUrl: "https://localhost:3000"
   });
   
