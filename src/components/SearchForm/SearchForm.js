@@ -4,8 +4,7 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import Preloader from '../Preloader/Preloader';
 
 
-function SearchForm({ handleSubmit, isLoading, getFilterСards }) {
- 
+function SearchForm({ handleSubmit, isLoading, getFilterСards, searchText }) {
     return (
         <section className='search-form'>
             <div className='search-form__wrap'>
@@ -14,9 +13,10 @@ function SearchForm({ handleSubmit, isLoading, getFilterСards }) {
                     <button className='search-form__button' type='submit'>Найти</button>                   
                 </form>
                 <FilterCheckbox />
-            </div>
+            </div>         
             { isLoading && <Preloader /> }
-            {getFilterСards === [] && <p className='search-form__alert'> Ничего не найдено </p> }
+            {(getFilterСards.length === 0 && searchText) && <p className='search-form__alert'> Ничего не найдено </p>}
+            {/* {getFilterСards.length === 0 && searchText ? <p className='search-form__alert'> Ничего не найдено </p> : isLoading && <Preloader /> } */}
         </section>
     )
 }

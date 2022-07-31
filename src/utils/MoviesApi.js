@@ -14,7 +14,7 @@ class MoviesApi {
       return Promise.reject(`Ошибка: ${res.status}`)
     }
   }
-
+// запрос данных карточек
     getMoviesBeatfilm() {
         return fetch(this._baseUrl, {
             headers: this._headers

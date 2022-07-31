@@ -3,10 +3,11 @@ import './Register.css';
 import Form from '../Form/Form';
 
 
-function Register() {
+function Register({ onRegister }) {
   return (
     <section className='register'>
-      <Form />
+      <Form onRegister={onRegister} />
+  
     </section>
   )
 }

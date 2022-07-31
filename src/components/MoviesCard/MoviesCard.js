@@ -1,49 +1,47 @@
 import React, { useState } from 'react';
 import './MoviesCard.css';
+import { BASE_URL_MOVIE } from '../../utils/constants'
 
 
-function MoviesCard({ title, time, img, pathname, id, getSavedCards }) {
+function MoviesCard({ movie, pathname, getSavedCards, getDeleteCards }) {
 
     //вкл-выкл лайка
     const [like, setLike] = useState(false);
-    // const [cardId, setCardId] = useState([]);
-    
-    
-    // function getSavedCards() {
-    //     setLike(true);
-    //     console.log('id== ', id);
-    //     if(cardId !== id){
-    //         setCardId([...cardId, id])    
-    //     }
-    //     // cardId.push(id)
-    //     // setCardId([...cardId])
-    //     // cardId.push(setCardId(id));
-    //     // console.log('cardId== ', cardId);
-    // }
-    // console.log('cardId=== ', cardId);
 
-    function onLike(){
+
+    function onLike() {
         setLike(true);
-        getSavedCards(id, title, time, img);
+        getSavedCards(movie);
     }
-    
-    return (
-        <article className='movies-card'>
-            <div className='movies-card__content'>
-                <div className='movies-card__desc'>
-                    <h2 className='movies-card__title'>{title}</h2>
-                    <p className='movies-card__time'>{time}</p>
-                </div>
-                {pathname === '/movies' ?
-                    <button className={like ? 'movies-card__button movies-card__button_active' : 'movies-card__button'} onClick={onLike}></button> :
-                    <button className='movies-card__button movies-card__button_cross'></button>
-                }                
-            </div>
-            <div className='movies-card__box-img'>
-                <img className='movies-card__img' src={img} alt={title} />
-            </div>
-        </article>
+    // не работает, приходит event вместо id
+    function offLike(id) {
+        setLike(false);
+        getDeleteCards(movie);
+    }
 
+    function translateTime(v) {
+        let hours = Math.trunc(v / 60);
+        let minutes = v % 60;
+        return hours + 'ч ' + minutes + 'м';
+    };
+
+    return (         
+                <article className='movies-card'>
+                    <div className='movies-card__content'>
+                        <div className='movies-card__desc'>
+                            <h2 className='movies-card__title'>{movie.nameRU}</h2>
+                            <p className='movies-card__time'>{translateTime(movie.duration)}</p>
+                        </div>
+                        {pathname === '/movies' ?
+                            <button className={like ? 'movies-card__button movies-card__button_active' : 'movies-card__button'} onClick={onLike}></button> :
+                            <button className='movies-card__button movies-card__button_cross' onClick={offLike}></button>
+                        }
+                    </div>
+                    <div className='movies-card__box-img'>
+                        <img className='movies-card__img' src={BASE_URL_MOVIE + movie.image.url} alt={movie.nameRU} />
+                    </div>
+                </article>          
+       
     )
 }
 

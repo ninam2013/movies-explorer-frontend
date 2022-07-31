@@ -2,11 +2,9 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Navigation.css';
 import Account from '../Account/Account';
-import { userName } from '../../utils/constants';
-
-function Navigation({ openMenu }) {
 
 
+function Navigation({ openMenu }) {    
     return (
         <>
             <nav className='navigation'>
@@ -19,7 +17,7 @@ function Navigation({ openMenu }) {
                     </NavLink>
                 </div>
                 <NavLink to="/profile" className="link">
-                    <Account userName={userName} />
+                    <Account />
                 </NavLink>
             </nav>
 
