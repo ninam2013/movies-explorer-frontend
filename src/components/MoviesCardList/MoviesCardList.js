@@ -6,7 +6,7 @@ import { errorServer } from '../../utils/constants'
 
 
 
-function MoviesCardList({ amountCards, getFilterСards, getSavedCards, saveCardData, getDeleteCards, cardOutputError }) {
+function MoviesCardList({ amountCards, getFilterСards, getSavedCards, getFilteredSavedCards, getDeleteCards, cardOutputError }) {
     const loc = useLocation();
 
     return (
@@ -21,10 +21,10 @@ function MoviesCardList({ amountCards, getFilterСards, getSavedCards, saveCardD
                             pathname={loc.pathname}
                             getSavedCards={getSavedCards}
                         />) :
-                    saveCardData.slice(0, amountCards).map(item =>
+                        getFilteredSavedCards.slice(0, amountCards).map(item =>
                         <MoviesCard
                             movie={item}
-                            key={item.id}
+                            key={item.movieId}
                             pathname={loc.pathname}
                             getDeleteCards={getDeleteCards}
                         />)

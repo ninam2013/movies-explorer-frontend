@@ -4,7 +4,7 @@ import pic from '../../images/pic.svg';
 import CurrentUserContext from '../../context/CurrentUserContext';
 
 function Account() {
-    const value = useContext(CurrentUserContext); 
+    const value = useContext(CurrentUserContext);
     return (
         <div className='button-profile'>
             <p className="account-text">{value.name}</p>

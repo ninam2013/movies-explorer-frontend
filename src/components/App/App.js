@@ -28,13 +28,13 @@ function App() {
   // все карточки
   const [cards, setCards] = useState([]);
   // сохраненные карточки
-  const [savedCards, setsavedCards] = useState([]);
+  const [savedCards, setSavedCards] = useState([]);
   // значение инпута
   const [searchText, setSearchText] = useState('');
+  // значение инпута сохраненных карточек
+  const [searchTextSavedCards, setSearchTextSavedCards] = useState('');
   // загрузка карточек(прелоадер)
   const [isLoading, setIsLoading] = useState(false);
-  // сохранение понравившихся карточек
-  const [saveCardData, setSaveCardData] = useState([]);
   // статус пользователя
   const [loggedIn, setLoggedIn] = useState(false);
   // ошибка на сервере
@@ -60,24 +60,54 @@ function App() {
     };
   });
 
+  useEffect(() => {  
+    const token = localStorage.getItem('token');  //сохраняем токен в переменной 
+    console.log('loggedIn= ', loggedIn );   
+    if (loggedIn) {   // если залоген
+      setIsLoading(true);   //включаем прелоадер
+      Promise.all([
+        mainApi.getMovies(token), //запрос данных карточек
+        mainApi.getUser(token)    //запрос данных пользователя
+      ]).then(([cards, userInfo]) => {        // приходят данные карточек и данные пользователя
+        console.log('cards= ', cards.movies, 'userInfo= ', userInfo.data, 'currentUser.id= ', currentUser.id );
+        const userSavedCards = cards.movies.filter((m) => {        // фильтруем данные карточек по id и записываем в переменную        
+          return m.owner === (currentUser.id || currentUser._id)
+        })
+        console.log('userSavedCards= ', userSavedCards );
+
+        localStorage.setItem('savedCards', JSON.stringify(userSavedCards));
+        setSavedCards(userSavedCards);
+        setCurrentUser(userInfo.data);
+       
+        // if (localStorage.getItem('beatFilmMovies')) {
+        //   setBeatfilmMovies(JSON.parse(localStorage.getItem('beatFilmMovies')));
+        // }
+      })
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+
+  }, [loggedIn, currentUser.id]);
+
   // запись карточек в хранилище
   const fetchCards = () => {
     moviesApi.getMoviesBeatfilm()
       .then((res) => {
-        // setCards(res);
+        setCards(res);
         localStorage.setItem('cards', JSON.stringify(res))
       })
       .catch((err) => setCardOutputError(true))
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('cards');
-
-    if (token) {
+    const localCards = localStorage.getItem('cards');
+    if (localCards) {
       try {
         if (searchText && searchText.length > 0) {
           // setIsLoading(true);
-          setCards(JSON.parse(token))
+          setCards(JSON.parse(localCards))
           // setIsLoading(false)              
         }
       }
@@ -129,37 +159,67 @@ function App() {
     setSearchText(e.target[0].value);
   }
 
+  // при сабмите поиска сохраненных фильмов
+  const handleSubmitSavedCardText = (e) => {
+    e.preventDefault();
+    setSearchTextSavedCards(e.target[0].value);
+  }
+
   // поиск по названию фильма
   const getFilterСards = cards.filter(card => {
     return card.nameRU.toLowerCase().includes(searchText.toLowerCase())
   });
 
+  // поиск по названию сохраненного фильма
+  const getFilteredSavedCards = savedCards.filter(card => {
+    return card.nameRU.toLowerCase().includes(searchTextSavedCards.toLowerCase())
+  });
 
-
-  // сохранение данных определенной карточки
+  // сохранение данных определенной карточки 
   function getSavedCards(movie) {
-    setIsLoading(true);
-    mainApi.saveMovie(movie)
-      .then((movie) => {
-        setSaveCardData(movie)
-        console.log('SaveCardData== ', saveCardData);
-        // if (!saveCardData.some(item => item === movie.id) || saveCardData.length === 0) {
-        //   saveCardData.push(movie);
-        // }
-        localStorage.setItem('saveCardData', JSON.stringify(movie));
+    console.log('movie Корень= ', movie); // приходит объект
+    const token = localStorage.getItem('token');
+    console.log('localStorage= ', localStorage.getItem('savedCards') === null);
+    if (localStorage.getItem('savedCards') === null) {    //если в хранилище пусто, срабатывает этот код
+      setIsLoading(true);     //включаем прелоадер
+      mainApi.saveMovie(movie, token)   //делаем запрос
+        .then((movie) => {    //возвращается объект с объектами {data:{data:{значения}}}     
+          const movieArr = [movie.data];
+          console.log('movie1= ', movie);
+          console.log('movieArr1= ', movieArr);
+          localStorage.setItem('savedCards', JSON.stringify(movieArr));    // записываю в хранилище как строку 
+          const newLocalSavedMovies = JSON.parse(localStorage.getItem('savedCards'));  // записываю в переменную массив с данными
+          console.log('newLocalSavedMovies1=', newLocalSavedMovies);
+          setSavedCards(newLocalSavedMovies);    //записываю в стейт как массив с объектом
+          console.log('savedCards1= ', savedCards);
+        })
+        .catch((err) => console.log(err))     // в обратном случае ошибка
+        .finally(() => {
+          setIsLoading(false);    // выключаю прелоадер
+        });
+    }
 
-        // setMovies(movies.map((m) => m.id === movie.movieId ? movie : m));
-        // const newSavedMovies = [movie, ...localSavedMovies];
-        // localStorage.setItem('savedMovies', JSON.stringify(newSavedMovies));
-        // setSavedMovies(newSavedMovies);
-      })
-      .catch((err) => {
-        console.log(err)
-        setCardOutputError(true)
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (localStorage.getItem('savedCards') !== null) {    //если в хранилище что-то есть, срабатывает этот код
+      const localSavedMovies = JSON.parse(localStorage.getItem('savedCards'));  // в переменную записываем массив с объектом из хранилища   
+      const isSaved = localSavedMovies.some((m) => m.movieId === movie.id);   // проверяем одинаковые ли id из хранилища и новой карточки
+      if (!isSaved) {   // если значения id разные
+        setIsLoading(true);   //включаем прелоадер
+        mainApi.saveMovie(movie, token)   //делаем запрос и записывем данные на сервер
+          .then((movie) => {         //возвращается объект с объектами {data:{data:{значения}}}
+
+            const movieArr = [movie.data];    // привожу в массив с объектом         
+            localStorage.setItem('savedCards', JSON.stringify([...localSavedMovies, ...movieArr]));       // записываю в хранилище как строку
+            const newLocalSavedMovies = JSON.parse(localStorage.getItem('savedCards'));       // записываю в переменную 
+            console.log('newLocalSavedMovies=', newLocalSavedMovies);
+            setSavedCards(newLocalSavedMovies);   //записываю в стейт как массив с объектом из локального хранилища
+            console.log('SavedCards= ', savedCards);
+          })
+          .catch((err) => console.log(err))      // в обратном случае ошибка
+          .finally(() => {
+            setIsLoading(false);       // выключаю прелоадер
+          });
+      }
+    }
   }
 
   // удаление определенной карточки
@@ -190,32 +250,30 @@ function App() {
   //           setLoggedIn(true)
   //       });
   // }
-
+  // регистрируем пользователя
   function handleRegister(name, email, password) {
     auth
       .register(name, email, password)
       .then((data) => {
-        console.log('dataRegister= ', data);
-        setCurrentUser(data);
-        localStorage.setItem('token', data);
-        history.push('/signin');
+        setCurrentUser(data);   
+        handleLogin(data.email, password);     
       })
   }
-  console.log('currentUser== ', currentUser);
+
+  // авторизуемся
   function handleLogin(email, password) {
     auth
       .authorize(email, password)
       .then((data) => {
-        console.log('dataLogin= ', data);
         if (data.token) {
-          localStorage.setItem('token', data.token);
+          localStorage.setItem('token', data.token);  //записываем только token
           setCurrentUser(data)
           setLoggedIn(true);
           history.push('/movies');
         }
       })
   }
-
+  // проверка токена
   function tokenCheck() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -224,12 +282,24 @@ function App() {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setCurrentUser({name:res.data.name, email:res.data.email, id:res.data._id})
+            setCurrentUser({ name: res.data.name, email: res.data.email, id: res.data._id })
             history.push("/movies");
           }
         })
         .catch((err) => console.log(err))
     }
+  }
+
+  // выход из системы
+  function signOut() {
+    setLoggedIn(false);
+    setCurrentUser({});
+    localStorage.removeItem('token');
+    localStorage.removeItem('savedCards');
+    localStorage.removeItem('cards');
+    setSavedCards([]);
+    setCards([]);
+    history.push('/');
   }
 
   return (
@@ -250,7 +320,7 @@ function App() {
             <Login onLogin={handleLogin} />
           </Route>
           <ProtectedRoute path="/profile" loggedIn={loggedIn}>
-            <Profile />
+            <Profile signOut={signOut} />
           </ProtectedRoute>
           <ProtectedRoute path="/movies" loggedIn={loggedIn}>
             <Movies
@@ -263,13 +333,16 @@ function App() {
               isLoading={isLoading}
               searchText={searchText}
               cardOutputError={cardOutputError}
+              savedCards={savedCards}
             />
           </ProtectedRoute>
           <ProtectedRoute path="/saved-movies" loggedIn={loggedIn}>
             <SavedMovies
               amountCards={amountCards}
               isLoading={isLoading}
-              saveCardData={saveCardData}
+              getFilteredSavedCards={getFilteredSavedCards}
+              handleSubmitSavedCardText={handleSubmitSavedCardText}
+              searchTextSavedCards={searchTextSavedCards}
             // getDeleteCards={getDeleteCards}        
             />
           </ProtectedRoute>

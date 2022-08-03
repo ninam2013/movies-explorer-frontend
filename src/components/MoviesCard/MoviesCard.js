@@ -25,23 +25,26 @@ function MoviesCard({ movie, pathname, getSavedCards, getDeleteCards }) {
         return hours + 'ч ' + minutes + 'м';
     };
 
-    return (         
-                <article className='movies-card'>
-                    <div className='movies-card__content'>
-                        <div className='movies-card__desc'>
-                            <h2 className='movies-card__title'>{movie.nameRU}</h2>
-                            <p className='movies-card__time'>{translateTime(movie.duration)}</p>
-                        </div>
-                        {pathname === '/movies' ?
-                            <button className={like ? 'movies-card__button movies-card__button_active' : 'movies-card__button'} onClick={onLike}></button> :
-                            <button className='movies-card__button movies-card__button_cross' onClick={offLike}></button>
-                        }
-                    </div>
-                    <div className='movies-card__box-img'>
-                        <img className='movies-card__img' src={BASE_URL_MOVIE + movie.image.url} alt={movie.nameRU} />
-                    </div>
-                </article>          
-       
+    return (
+        <article className='movies-card'>
+            <div className='movies-card__content'>
+                <div className='movies-card__desc'>
+                    <h2 className='movies-card__title'>{movie.nameRU}</h2>
+                    <p className='movies-card__time'>{translateTime(movie.duration)}</p>
+                </div>
+                {pathname === '/movies' ?
+                    <button className={like ? 'movies-card__button movies-card__button_active' : 'movies-card__button'} onClick={onLike}></button> :
+                    <button className='movies-card__button movies-card__button_cross' onClick={offLike}></button>
+                }
+            </div>
+            <div className='movies-card__box-img'>
+                {pathname === '/movies' ?
+                    <img className='movies-card__img' src={BASE_URL_MOVIE + movie.image.url} alt={movie.nameRU} />
+                    : <img className='movies-card__img' src={movie.image} alt={movie.nameRU} />
+                }            
+            </div>
+        </article>
+
     )
 }
 

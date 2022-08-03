@@ -55,6 +55,7 @@
     outline: none;
     margin: 0;
     padding: 0;
+    background-color: transparent;
 }
 
 .profile__link {
@@ -80,6 +81,30 @@
 .profile__link_margin_top {
     margin: 16px 0 0 0;
 }
+
+.profile__button-save {
+    display: flex;
+    width: 410px;
+    height: 45px;
+    justify-content: center;
+    align-items: center;
+    background: #3456F3;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFF;
+    margin: 223px 0 0 0;
+    padding: 0;
+    transition: all .3s;
+}
+
+.profile__button-save:hover {
+    opacity: .6;
+}
+
 
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {
     .profile {
@@ -126,5 +151,12 @@
 
     .profile__link_margin_top {
         margin: 16px 0 0 0;
+    }
+
+    .profile__button-save {       
+        width: 260px;
+        height: 30px;
+        font-size: 11px;
+        line-height: 13px;
     }
 }

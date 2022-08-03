@@ -9,17 +9,18 @@ class MainApi {
   }
 
   _getResponseData(res) {
-    if (res.ok) {     
+    if (res.ok) {       
       return res.json();
     }
     return Promise.reject(new Error(`Ошибка: ${res.status}`));
   }
 
   // сохранение фильма
-  saveMovie( movie ) {    
+  saveMovie( movie, token ) {    
     return fetch(`${BASE_URL_SITE}/movies`, {
       method: "POST",      
       headers: {
+        authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
@@ -30,7 +31,7 @@ class MainApi {
         year: movie.year ? movie.year : 0, 
         description: movie.description ? movie.description : 'default', 
         image: movie.image.url ? BASE_URL_MOVIE + movie.image.url : movie.image, 
-        trailer: movie.trailer ? movie.trailer : movie.trailerLink, 
+        trailerLink: movie.trailerLink, 
         nameRU: movie.nameRU ? movie.nameRU : 'default', 
         nameEN: movie.nameEN ? movie.nameEN : 'default', 
         thumbnail: movie.thumbnail ? movie.thumbnail : BASE_URL_MOVIE + movie.image.formats.thumbnail.url, 
@@ -41,19 +42,29 @@ class MainApi {
   }
 
   // запрос данных пользователя
-  getUser() {
+  getUser(token) {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers
-    }).then((res) => this._getResponseData(res));
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((res) => this._getResponseData(res));    
   }
 
-}
-const mainApi = new MainApi({
-  baseUrl: `${BASE_URL_SITE}`,
-  headers: {
-    // authorization: `Bearer ${jwt}`,
-    'Content-Type': 'application/json'
+  // запрос данных фильмов
+  getMovies(token) {
+    return fetch(`${this._baseUrl}/movies`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => this._getResponseData(res)); 
   }
+}
+
+const mainApi = new MainApi({
+  baseUrl: `${BASE_URL_SITE}`
 });
 
 export default mainApi;

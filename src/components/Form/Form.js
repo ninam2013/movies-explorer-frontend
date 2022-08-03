@@ -11,8 +11,8 @@ class Form extends React.Component {
             email: '',
             password: ''
         };
-   
-        this.handleInputChange = this.handleInputChange.bind(this);       //жестко привязываем this
+
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     }
