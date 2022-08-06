@@ -12,15 +12,15 @@ import Menu from '../Menu/Menu';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import moviesApi from '../../utils/MoviesApi';
-// import { BASE_URL_MOVIE } from '../../utils/constants'
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import * as auth from '../../utils/auth.js';
 import mainApi from "../../utils/MainApi";
-import CurrentUserContext from '../../context/CurrentUserContext'
+import CurrentUserContext from '../../context/CurrentUserContext';
+import { useCurrentWidth } from '../../hooks/useCurrentWidth';
 
 
 function App() {
-  const location = useLocation();
+
   // активация мобильного меню
   const [menuActive, setMenuActive] = useState(false);
   // кол-во карточек при определенном разрешении
@@ -42,46 +42,34 @@ function App() {
   // данные пользователя
   const [currentUser, setCurrentUser] = useState({});
 
+
+  const location = useLocation();
   const history = useHistory();
+  const width = useCurrentWidth();
 
   useEffect(() => {
     tokenCheck();
+    changeWidth(width);     // при изменении пути странички вызывается функция changeWidth
   }, []);
 
-  // при изменении пути странички вызывается функция changeWidth 
-  useEffect(() => {
-    changeWidth(window.innerWidth)
-  }, [location.pathname]);
 
-  // при изменении разрешения окна меняется кол-во карточек 
-  useEffect(() => {
-    window.onresize = function () {
-      changeWidth(window.innerWidth)
-    };
-  });
 
-  useEffect(() => {  
-    const token = localStorage.getItem('token');  //сохраняем токен в переменной 
-    console.log('loggedIn= ', loggedIn );   
+  // изначальная загрузка данных пользователя
+  useEffect(() => {
+    const token = localStorage.getItem('token');  //сохраняем токен в переменной
     if (loggedIn) {   // если залоген
       setIsLoading(true);   //включаем прелоадер
       Promise.all([
         mainApi.getMovies(token), //запрос данных карточек
         mainApi.getUser(token)    //запрос данных пользователя
       ]).then(([cards, userInfo]) => {        // приходят данные карточек и данные пользователя
-        console.log('cards= ', cards.movies, 'userInfo= ', userInfo.data, 'currentUser.id= ', currentUser.id );
-        const userSavedCards = cards.movies.filter((m) => {        // фильтруем данные карточек по id и записываем в переменную        
-          return m.owner === (currentUser.id || currentUser._id)
-        })
-        console.log('userSavedCards= ', userSavedCards );
-
+        const userSavedCards = cards
+          .movies.filter((m) => m.owner === currentUser._id)        // фильтруем данные карточек по id и записываем в переменную
+          .map(m => {m.isSaved = true; return m;})    //добавляю значение isSaved
+        ;
         localStorage.setItem('savedCards', JSON.stringify(userSavedCards));
         setSavedCards(userSavedCards);
         setCurrentUser(userInfo.data);
-       
-        // if (localStorage.getItem('beatFilmMovies')) {
-        //   setBeatfilmMovies(JSON.parse(localStorage.getItem('beatFilmMovies')));
-        // }
       })
         .catch((err) => console.log(err))
         .finally(() => {
@@ -89,7 +77,7 @@ function App() {
         });
     }
 
-  }, [loggedIn, currentUser.id]);
+  }, [loggedIn, currentUser._id]);
 
   // запись карточек в хранилище
   const fetchCards = () => {
@@ -106,9 +94,16 @@ function App() {
     if (localCards) {
       try {
         if (searchText && searchText.length > 0) {
-          // setIsLoading(true);
-          setCards(JSON.parse(localCards))
-          // setIsLoading(false)              
+          let savedCardsMap = {};
+          for (let m of savedCards) {
+            savedCardsMap[m.movieId] = true;
+          }
+
+          let localCardsList = JSON.parse(localCards);
+          for (let m of localCardsList) {
+            m.isSaved = !!savedCardsMap[m.id];
+          }
+            setCards(localCardsList)
         }
       }
       catch (err) {
@@ -132,26 +127,33 @@ function App() {
   };
 
   // вывод количества карточек в зависимости от разрешения экрана
-  function changeWidth(changeScreen) {
-    if ((changeScreen >= 320 && changeScreen < 480) && location.pathname === '/movies') {
+  function changeWidth(width) {
+    if (width >= 320 && width < 480) {
       setAmountCards(5);
     }
-    if ((changeScreen >= 320 && changeScreen < 480) && location.pathname === '/saved-movies') {
+    if (width >= 480 && width < 768) {
       setAmountCards(5);
     }
-    if ((changeScreen >= 480 && changeScreen < 1279) && location.pathname === '/movies') {
-      setAmountCards(8);
+    if (width >= 768 && width < 1280) {
+      setAmountCards(7);
     }
-    if ((changeScreen >= 480 && changeScreen < 1279) && location.pathname === '/saved-movies') {
-      setAmountCards(8);
-    }
-    if ((changeScreen >= 1280) && location.pathname === '/movies') {
-      setAmountCards(12);
-    }
-    if ((changeScreen >= 1280) && location.pathname === '/saved-movies') {
-      setAmountCards(12);
+    if (width >= 1280) {
+      setAmountCards(7);
     }
   };
+
+// вывод карточек по кнопке
+  function getLoadStep(width) {
+    if (width >= 1280) {
+      return 3;
+    }
+    return 2;
+  };
+
+  // при нажатии на ещё появляются карточки
+  function handleLoadMore() {
+    setAmountCards((prevCount) => prevCount + getLoadStep(width))
+}
 
   // при сабмите поиска фильма
   const handleSubmit = (e) => {
@@ -175,44 +177,36 @@ function App() {
     return card.nameRU.toLowerCase().includes(searchTextSavedCards.toLowerCase())
   });
 
-  // сохранение данных определенной карточки 
+  // сохранение данных определенной карточки
   function getSavedCards(movie) {
-    console.log('movie Корень= ', movie); // приходит объект
     const token = localStorage.getItem('token');
-    console.log('localStorage= ', localStorage.getItem('savedCards') === null);
-    if (localStorage.getItem('savedCards') === null) {    //если в хранилище пусто, срабатывает этот код
-      setIsLoading(true);     //включаем прелоадер
-      mainApi.saveMovie(movie, token)   //делаем запрос
-        .then((movie) => {    //возвращается объект с объектами {data:{data:{значения}}}     
-          const movieArr = [movie.data];
-          console.log('movie1= ', movie);
-          console.log('movieArr1= ', movieArr);
-          localStorage.setItem('savedCards', JSON.stringify(movieArr));    // записываю в хранилище как строку 
-          const newLocalSavedMovies = JSON.parse(localStorage.getItem('savedCards'));  // записываю в переменную массив с данными
-          console.log('newLocalSavedMovies1=', newLocalSavedMovies);
-          setSavedCards(newLocalSavedMovies);    //записываю в стейт как массив с объектом
-          console.log('savedCards1= ', savedCards);
+    if (localStorage.getItem('savedCards') === null) {    // если в хранилище пусто, срабатывает этот код
+      setIsLoading(true);     // включаем прелоадер
+      mainApi.saveMovie(movie, token)   // делаем запрос
+        .then((movieData) => {    // возвращается объект с объектами {data:{data:{значения}}}
+          movieData.data.isSaved = true;
+          const changeObj = [movieData.data];   // привожу в массив с объектом без data
+          localStorage.setItem('savedCards', JSON.stringify(changeObj));    // записываю в хранилище как строку
+          const newLocalSavedCards = JSON.parse(localStorage.getItem('savedCards'));  // записываю в переменную массив с данными
+          setSavedCards(newLocalSavedCards);    // записываю в стейт как массив с объектом
         })
         .catch((err) => console.log(err))     // в обратном случае ошибка
         .finally(() => {
           setIsLoading(false);    // выключаю прелоадер
         });
     }
-
-    if (localStorage.getItem('savedCards') !== null) {    //если в хранилище что-то есть, срабатывает этот код
-      const localSavedMovies = JSON.parse(localStorage.getItem('savedCards'));  // в переменную записываем массив с объектом из хранилища   
-      const isSaved = localSavedMovies.some((m) => m.movieId === movie.id);   // проверяем одинаковые ли id из хранилища и новой карточки
+    if (localStorage.getItem('savedCards') !== null) {    // если в хранилище что-то есть, срабатывает этот код
+      const localSavedCards = JSON.parse(localStorage.getItem('savedCards'));  // в переменную записываем массив с объектом из хранилища
+      const isSaved = localSavedCards.some((m) => m.movieId === movie.id);   // проверяем одинаковые ли id из хранилища и новой карточки
       if (!isSaved) {   // если значения id разные
-        setIsLoading(true);   //включаем прелоадер
+        setIsLoading(true);   // включаем прелоадер
         mainApi.saveMovie(movie, token)   //делаем запрос и записывем данные на сервер
-          .then((movie) => {         //возвращается объект с объектами {data:{data:{значения}}}
-
-            const movieArr = [movie.data];    // привожу в массив с объектом         
-            localStorage.setItem('savedCards', JSON.stringify([...localSavedMovies, ...movieArr]));       // записываю в хранилище как строку
-            const newLocalSavedMovies = JSON.parse(localStorage.getItem('savedCards'));       // записываю в переменную 
-            console.log('newLocalSavedMovies=', newLocalSavedMovies);
-            setSavedCards(newLocalSavedMovies);   //записываю в стейт как массив с объектом из локального хранилища
-            console.log('SavedCards= ', savedCards);
+          .then((movieData) => {         //возвращается объект с объектами {data:{значения}}}
+            movieData.data.isSaved = true;
+            const changeObj = [movieData.data];    // привожу в массив с объектом без data
+            localStorage.setItem('savedCards', JSON.stringify([...localSavedCards, ...changeObj]));       // записываю в хранилище как строку
+            const newLocalSavedCards = JSON.parse(localStorage.getItem('savedCards'));       // записываю в переменную
+            setSavedCards(newLocalSavedCards);   //записываю в стейт как массив с объектом из локального хранилища
           })
           .catch((err) => console.log(err))      // в обратном случае ошибка
           .finally(() => {
@@ -222,41 +216,33 @@ function App() {
     }
   }
 
-  // удаление определенной карточки
-  // function getDeleteCards(id, title, time, img) {  
-  //   if (!saveCardData.some(item => item.id === id)) {
-  //     saveCardData.shift({ id, title, time, img });
-  //     console.log('id== ', id ); 
-  //   }
-  // }
 
-  //   const handleRegister = (username, password, email) => {
-  //     return auth
-  //         .register(username, password, email)
-  //         .then(() => {
-  //             history.push('/signin');
-  //         });
-  // }
+  // удаление карточки
+  function getDeleteCards(movie) {
+    setIsLoading(true);   //включаем прелоадер
+    const token = localStorage.getItem('token');  // записываем токен в переменную
+    const localSavedCards = JSON.parse(localStorage.getItem('savedCards'));  // данные хранящиеся в хранилище
+    mainApi.deleteCard(movie._id || movie.id, token)   // делаем запрос на удаление
+      .then((res) => {
+        const newCards = localSavedCards.filter((obj) => obj._id !== movie._id);  // фильтруем карточки и оставляем в переменной все кроме удаленной
+        localStorage.setItem('savedCards', JSON.stringify(newCards));   // перезаписываем новые данные сохраненных карточек в хранилище
+        setSavedCards(newCards);   // перезаписываем новые данные в стейт без удаленной карточки, можно такой вариант
+      })
+      .catch((err) => {
+        console.log(`${err}`);
+      })
+      .finally(() => {
+        setIsLoading(false);    // выключаю прелоадер
+      });
+  }
 
-  // const handleLogin = (email, password) => {
-  //   return auth
-  //       .authorize(email, password)
-  //       .then((data) => {
-  //           if (!data.jwt) {
-  //               return;
-  //           }
-  //           localStorage.setItem('jwt', data.jwt);
-
-  //           setLoggedIn(true)
-  //       });
-  // }
   // регистрируем пользователя
   function handleRegister(name, email, password) {
     auth
       .register(name, email, password)
       .then((data) => {
-        setCurrentUser(data);   
-        handleLogin(data.email, password);     
+        setCurrentUser(data);
+        handleLogin(data.email, password);
       })
   }
 
@@ -273,6 +259,7 @@ function App() {
         }
       })
   }
+
   // проверка токена
   function tokenCheck() {
     const token = localStorage.getItem('token');
@@ -330,10 +317,12 @@ function App() {
               cards={cards}
               getFilterСards={getFilterСards}
               getSavedCards={getSavedCards}
+              getDeleteCards={getDeleteCards}
               isLoading={isLoading}
               searchText={searchText}
               cardOutputError={cardOutputError}
               savedCards={savedCards}
+              handleLoadMore={handleLoadMore}
             />
           </ProtectedRoute>
           <ProtectedRoute path="/saved-movies" loggedIn={loggedIn}>
@@ -343,7 +332,7 @@ function App() {
               getFilteredSavedCards={getFilteredSavedCards}
               handleSubmitSavedCardText={handleSubmitSavedCardText}
               searchTextSavedCards={searchTextSavedCards}
-            // getDeleteCards={getDeleteCards}        
+              getDeleteCards={getDeleteCards}
             />
           </ProtectedRoute>
           <Route path="*">

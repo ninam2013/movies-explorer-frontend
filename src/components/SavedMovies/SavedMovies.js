@@ -4,21 +4,28 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
 
-function SavedMovies({ amountCards, isLoading, getFilteredSavedCards, getDeleteCards, handleSubmitSavedCardText, searchTextSavedCards }) { 
-    // console.log('savedCards-SavedMovies= ', getFilteredSavedCards);  
+function SavedMovies({
+    amountCards,
+    isLoading,
+    getFilteredSavedCards,
+    getDeleteCards,
+    handleSubmitSavedCardText,
+    searchTextSavedCards })
+{
+
 
     return (
         <section className='saved-movies'>
-            <SearchForm            
-            isLoading={isLoading} 
-            getFilteredSavedCards={getFilteredSavedCards}            
+            <SearchForm
+            isLoading={isLoading}
+            getFilteredSavedCards={getFilteredSavedCards}
             searchTextSavedCards={searchTextSavedCards}
-            handleSubmitSavedCardText={handleSubmitSavedCardText}  
+            handleSubmitSavedCardText={handleSubmitSavedCardText}
             />
-            <MoviesCardList 
-            amountCards={amountCards} 
-            getFilteredSavedCards={getFilteredSavedCards} 
-            getDeleteCards={getDeleteCards} 
+            <MoviesCardList
+            amountCards={amountCards}
+            getFilteredSavedCards={getFilteredSavedCards}
+            getDeleteCards={getDeleteCards}
             />
         </section>
     )

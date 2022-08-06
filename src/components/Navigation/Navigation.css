@@ -14,17 +14,12 @@
     margin-left: 44px;
 }
 
-.navigation__text {
-    font-weight: 400;
+.navigation__text {    
     font-size: 13px;
     line-height: 18px;
     color: #000;
     margin: 0;
     padding: 0;
-}
-
-.navigation__text_active {
-    font-weight: 500;
 }
 
 .navigation__text_margin_left {
@@ -63,6 +58,10 @@
 
 .navigation-mobile {
     display: none;
+}
+
+.active-link-navigation {
+     font-weight: 500;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {

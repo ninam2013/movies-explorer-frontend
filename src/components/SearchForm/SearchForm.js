@@ -5,15 +5,20 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import Preloader from '../Preloader/Preloader';
 
 
-function SearchForm({ handleSubmit, isLoading, getFilterСards, searchText, getFilteredSavedCards, handleSubmitSavedCardText, searchTextSavedCards }) {
-    // console.log('isLoading-SearchForm ', isLoading);
-    // console.log('getFilteredSavedCards-SearchForm ', getFilteredSavedCards);
-    // console.log('searchText-SearchForm ', searchText);
-    // console.log('searchTextSavedCards-SearchForm ', searchTextSavedCards);
-    // console.log('!!getFilterСards.length-SearchForm ', !!getFilterСards.length);
+function SearchForm(
+    {
+        handleSubmit,
+        isLoading,
+        getFilterСards,
+        searchText,
+        getFilteredSavedCards,
+        handleSubmitSavedCardText,
+        searchTextSavedCards
+    })
+{
 
     const location = useLocation();
-    // console.log('getFilterСards-SearchForm ', getFilterСards);
+
     return (
         <section className='search-form'>
             <div className='search-form__wrap'>
@@ -33,9 +38,9 @@ function SearchForm({ handleSubmit, isLoading, getFilterСards, searchText, getF
             {isLoading && <Preloader />}
             {
                 location.pathname === '/movies' ?
-                    (getFilterСards.length === 0 || searchText === '') && <p className='search-form__alert'> Ничего не найдено </p>
-                    : (searchTextSavedCards.length === 0 || searchText === '') && <p className='search-form__alert'> Ничего не найдено </p>
-            }            
+                    (getFilterСards.length === 0 && searchText ) && <p className='search-form__alert'> Ничего не найдено </p>
+                    : (getFilteredSavedCards.length === 0 && searchTextSavedCards ) && <p className='search-form__alert'> Ничего не найдено </p>
+            }
         </section>
     )
 }

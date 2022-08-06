@@ -6,11 +6,19 @@ import { errorServer } from '../../utils/constants'
 
 
 
-function MoviesCardList({ amountCards, getFilterСards, getSavedCards, getFilteredSavedCards, getDeleteCards, cardOutputError }) {
+function MoviesCardList({
+    amountCards,
+    getFilterСards,
+    getSavedCards,
+    getFilteredSavedCards,
+    getDeleteCards,
+    cardOutputError,
+    handleLoadMore })
+{
     const loc = useLocation();
 
-    return (
 
+    return (
         <section className='movies-card-list'>
             {cardOutputError ? <p className='user-alert'>{errorServer}</p> :
                 loc.pathname === '/movies' ?
@@ -20,6 +28,7 @@ function MoviesCardList({ amountCards, getFilterСards, getSavedCards, getFilter
                             key={item.id}
                             pathname={loc.pathname}
                             getSavedCards={getSavedCards}
+                            getDeleteCards={getDeleteCards}
                         />) :
                         getFilteredSavedCards.slice(0, amountCards).map(item =>
                         <MoviesCard
@@ -31,7 +40,8 @@ function MoviesCardList({ amountCards, getFilterСards, getSavedCards, getFilter
             }
 
             {loc.pathname === '/movies' ?
-                <button className='movies-card-list__buttom'>Ещё</button> :
+            (amountCards < getFilterСards.length ||  getFilterСards.length < 3) &&
+                <button className='movies-card-list__buttom' onClick={handleLoadMore} >Ещё</button> :
                 <button className='movies-card-list__buttom movies-card-list__buttom_visibility_hidden'>Ещё</button>
             }
         </section>

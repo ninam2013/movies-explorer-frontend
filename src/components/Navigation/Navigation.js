@@ -9,10 +9,10 @@ function Navigation({ openMenu }) {
         <>
             <nav className='navigation'>
                 <div className="navigation__container">
-                    <NavLink to="/movies" className="link">
-                        <p className="navigation__text navigation__text_active">Фильмы</p>
+                    <NavLink to="/movies" className="link" activeClassName="active-link-navigation"> 
+                        <p className="navigation__text">Фильмы</p>
                     </NavLink>
-                    <NavLink to="/saved-movies" className="link">
+                    <NavLink to="/saved-movies" className="link" activeClassName="active-link-navigation">
                         <p className="navigation__text navigation__text_margin_left">Сохраненные фильмы</p>
                     </NavLink>
                 </div>
