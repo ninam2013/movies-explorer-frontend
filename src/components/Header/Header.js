@@ -5,14 +5,14 @@ import logo from '../../images/logo.svg';
 import Navigation from '../Navigation/Navigation';
 
 
-function Header({ pathname, openMenu }) {
+function Header({ pathname, openMenu, loggedIn }) {
   const headerClassName = (
-    `header 
+    `header
       ${(pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile') && 'header_background_white'}
        ${pathname === '/' && 'header_background_black'} ${(pathname === '/signup' || pathname === '/signin') && 'header_appearance_change'}
       `
   )
-
+  // ${(loggedIn && pathname === '/') &&  'header_background_black'}
   let header;
   if (pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile') {
     header = (<Navigation openMenu={openMenu} />)
@@ -24,12 +24,16 @@ function Header({ pathname, openMenu }) {
     header = (<h1 className='header__title'>Рады видеть!</h1>)
   }
 
+  if (pathname === '/' && loggedIn) {
+    header = (<Navigation openMenu={openMenu} loggedIn={loggedIn} />)
+  }
+
   return (
     <header className={headerClassName}>
       <NavLink to="/" className="link">
         <img src={logo} className="header__logo" alt="logo" />
       </NavLink>
-      {pathname === '/' ?
+      {pathname === '/' && !loggedIn ?
         <nav className="header__container-registration">
           <NavLink to="/signup" className="link">
             <p className="registration-text">Регистрация</p>

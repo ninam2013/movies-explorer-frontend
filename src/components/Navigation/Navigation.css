@@ -14,12 +14,16 @@
     margin-left: 44px;
 }
 
-.navigation__text {    
+.navigation__text {
     font-size: 13px;
     line-height: 18px;
     color: #000;
     margin: 0;
     padding: 0;
+}
+
+.navigation__text_color_white {
+    color: #FFF;
 }
 
 .navigation__text_margin_left {

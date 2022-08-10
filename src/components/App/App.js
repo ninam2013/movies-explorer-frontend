@@ -427,6 +427,7 @@ function App() {
         <Header
           pathname={location.pathname}
           openMenu={openMenu}
+          loggedIn={loggedIn}
         />
         <Switch>
           <Route exact path="/">

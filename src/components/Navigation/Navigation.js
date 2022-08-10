@@ -4,20 +4,25 @@ import './Navigation.css';
 import Account from '../Account/Account';
 
 
-function Navigation({ openMenu }) {
+function Navigation({ openMenu, loggedIn }) {
+    const navigationClassName = (
+        `${!loggedIn && 'navigation__text'}
+         ${loggedIn && 'navigation__text navigation__text_color_white'}
+        `
+      )
     return (
         <>
             <nav className='navigation'>
                 <div className="navigation__container">
                     <NavLink to="/movies" className="link" activeClassName="active-link-navigation">
-                        <p className="navigation__text">Фильмы</p>
+                        <p className={navigationClassName}>Фильмы</p>
                     </NavLink>
                     <NavLink to="/saved-movies" className="link" activeClassName="active-link-navigation">
-                        <p className="navigation__text navigation__text_margin_left">Сохраненные фильмы</p>
+                        <p className= {navigationClassName + 'navigation__text_margin_left'}>Сохраненные фильмы</p>
                     </NavLink>
                 </div>
                 <NavLink to="/profile" className="link">
-                    <Account />
+                    <Account loggedIn={loggedIn} />
                 </NavLink>
             </nav>
 
