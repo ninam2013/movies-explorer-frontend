@@ -78,23 +78,23 @@ class MainApi {
       })
     })
       .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject((res.status));
-    })
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject((res.status));
+      })
   }
 
-// запрос данных фильмов
-getMovies(token) {
-  return fetch(`${this._baseUrl}/movies`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  })
-  .then((res) => this._getResponseData(res));
-}
+  // запрос данных фильмов
+  getMovies(token) {
+    return fetch(`${this._baseUrl}/movies`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((res) => this._getResponseData(res));
+  }
 };
 
 const mainApi = new MainApi({

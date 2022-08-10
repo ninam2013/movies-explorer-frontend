@@ -7,8 +7,7 @@ import { BASE_URL_MOVIE } from '../../utils/constants';
 function MoviesCard({
     movie,
     pathname,
-    changeLike })
-{
+    changeLike }) {
 
 
     function handleLike(e) {

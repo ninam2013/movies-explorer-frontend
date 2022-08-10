@@ -7,18 +7,15 @@ function Movies({
     pathname,
     amountCards,
     handleSubmit,
-    getFilterСards,
     isLoading,
-    getSavedCards,
-    getDeleteCards,
     cardId,
     searchText,
     cardOutputError,
     savedCards,
     handleLoadMore,
     handleChangeCheckbox,
-    changeLike})
-{
+    changeLike,
+    searchCards }) {
 
 
     return (
@@ -26,20 +23,19 @@ function Movies({
             <SearchForm
                 handleSubmit={handleSubmit}
                 isLoading={isLoading}
-                getFilterСards={getFilterСards}
                 searchText={searchText}
                 handleChangeCheckbox={handleChangeCheckbox}
-
+                searchCards={searchCards}
             />
             <MoviesCardList
                 pathname={pathname}
                 amountCards={amountCards}
-                getFilterСards={getFilterСards}
                 cardId={cardId}
                 cardOutputError={cardOutputError}
                 savedCards={savedCards}
                 handleLoadMore={handleLoadMore}
                 changeLike={changeLike}
+                searchCards={searchCards}
             />
         </section>
     )

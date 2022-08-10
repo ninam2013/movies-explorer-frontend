@@ -50,7 +50,7 @@ function App() {
   // видимость кнопок в профиле
   const [profileEditing, setProfileEditing] = useState(false);
 
-  console.log('errorText===', errorText)
+
   const location = useLocation();
   const history = useHistory();
   const width = useCurrentWidth();
@@ -83,8 +83,8 @@ function App() {
           setIsLoading(false);    // выключаю прелоадер
         });
     }
-
   }, [loggedIn, currentUser._id]);
+
 
   // запись карточек на сервер, в стейт и хранилище
   const fetchCards = () => {
@@ -95,6 +95,7 @@ function App() {
       })
       .catch((err) => setCardOutputError(true))     // если что-то пошло не так выдаю ошибку
   }
+
 
   useEffect(() => {
     const localCards = localStorage.getItem('cards');   // записываем в переменную данные из хранилища
@@ -127,10 +128,12 @@ function App() {
     setMenuActive(true)
   };
 
+
   // закрыть мобильное меню
   function closeMenu() {
     setMenuActive(false)
   };
+
 
   // вывод количества карточек в зависимости от разрешения экрана
   function changeWidth(width) {
@@ -148,6 +151,7 @@ function App() {
     }
   };
 
+
   // вывод карточек по кнопке
   function getLoadStep(width) {
     if (width >= 1280) {
@@ -156,15 +160,18 @@ function App() {
     return 2;
   };
 
+
   // при нажатии на кнопку "редактирование" происходит изменение странички
   function handleProfile() {
     setProfileEditing(true);
   }
 
+
   // при нажатии на "ещё" появляются карточки
   function handleLoadMore() {
     setAmountCards((prevCount) => prevCount + getLoadStep(width))
   }
+
 
   // при сабмите поиска фильма
   const handleSubmit = (e) => {
@@ -172,24 +179,18 @@ function App() {
     setSearchText(e.target[0].value);
   }
 
+
   // при сабмите поиска сохраненных фильмов
   const handleSubmitSavedCardText = (e) => {
     e.preventDefault();
     setSearchTextSavedCards(e.target[0].value);
   }
 
-  // поиск по названию фильма
-  const getFilterСards = cards.filter(card => {
-    return card.nameRU.toLowerCase().includes(searchText.toLowerCase())
-  });
 
   // изменение согласно чекбокса
   function handleChangeCheckbox(e) {
     if (e.target.checked) {
       setCheckbox(true);
-      // const getFilterСardsСhecked = getFilterСards.filter(card => {
-      //   return card.duration <= 40;
-      // })
     } else {
       setCheckbox(false);
     }
@@ -200,53 +201,40 @@ function App() {
   function handleChangeCheckboxSavedCards(e) {
     if (e.target.checked) {
       setCheckboxSavedCards(true);
-      // const getFilterСardsСhecked = getFilterСards.filter(card => {
-      //   return card.duration <= 40;
-      // })
     } else {
       setCheckboxSavedCards(false);
     }
   }
 
-  // поиск по названию сохраненного фильма
-  const getFilteredSavedCards = savedCards.filter(card => {
-    return card.nameRU.toLowerCase().includes(searchTextSavedCards.toLowerCase())
-  });
-
-
-  const handleGeneralSearch = () => {     // общая функция поиска
-    if (searchText) {         // текст введенный в поисковике
-      return cards.filter(card => card.nameRU.toLowerCase().includes(searchText.toLowerCase()))
+  // фильтрация карточек
+  function search(cardsList, filter, isShort) {
+    let filteredCards = cardsList;
+    if (filter) {
+      filteredCards = filteredCards.filter(card =>
+        card.nameRU.toLowerCase().includes(filter.toLowerCase()));
     }
-
-    if (checkbox) {     // флажок всех карточек
-      return cards.filter(card => card.duration <= '40')   // вот здесь должна быть вместо cards зависимость от верхнего if, так и без неё
+    if (isShort) {
+      filteredCards = filteredCards.filter(card => card.duration <= 40);
     }
-
-    if (searchTextSavedCards) {   // текст введенный в поисковике сохраненных фильмов
-      return savedCards.filter(card => card.nameRU.toLowerCase().includes(searchTextSavedCards.toLowerCase()))
-    }
-
-    if (handleChangeCheckboxSavedCards) {   // флажок сохраненных карточек
-      return savedCards.filter(card => card => card.duration <= '40')   // вот здесь должна быть вместо savedCards зависимость от верхнего if, так и без неё
-    }
+    return filteredCards;
   }
 
-  let jointSearch = handleGeneralSearch()  // присваиваю значение функции в переменную и при помощи переменной вывожу карточки
+  // поиск по названию фильма
+  const searchCards = search(cards, searchText, checkbox);
 
-  console.log('jointSearch=', jointSearch);   //если выводить по одному if, то условие отрабатывает. Если выводить все разом выводиться только верхний if
+  // поиск по названию сохраненного фильма
+  const searchSavedCards = search(savedCards, searchTextSavedCards, checkboxSavedCards);
+
 
   // определяю сохранять или удалять карточку
   function changeLike(movie) {
-    console.log('movie-changeLike', movie);
     if (!movie.isSaved) {
       getSavedCards(movie);    // добавляем карточку в избранное
-      console.log('добавляем', movie);
     } if (movie.isSaved) {
-      console.log('удаляем', movie);
       getDeleteCards(movie); // удаляем карточку из избранного
     }
   }
+
 
   // сохранение данных определенной карточки
   function getSavedCards(movie) {
@@ -287,13 +275,13 @@ function App() {
     }
   }
 
+
   // удаление карточки
   function getDeleteCards(movie) {
     setIsLoading(true);   //включаем прелоадер
     const token = localStorage.getItem('token');  // записываем токен в переменную
     const localSavedCards = JSON.parse(localStorage.getItem('savedCards'));  // данные хранящиеся в хранилище
     const desiredСard = localSavedCards.filter((obj) => (obj.movieId === movie.id) || (obj.movieId === movie.movieId));  // привожу к одному виду
-    console.log('desiredСard', desiredСard);
     mainApi.deleteCard(desiredСard[0]._id, token)   // делаем запрос на удаление
       .then((res) => {
         const newCards = localSavedCards.filter((obj) => obj._id !== movie._id);  // фильтруем карточки и оставляем в переменной все кроме удаленной
@@ -307,6 +295,7 @@ function App() {
         setIsLoading(false);    // выключаю прелоадер
       });
   }
+
 
   // изменение профиля
   const handleEditProfile = ({ email, name }) => {
@@ -330,6 +319,7 @@ function App() {
       });
   }
 
+
   // определение ошибок
   function errorSelection(err) {
     if (err === 0) {
@@ -338,7 +328,7 @@ function App() {
     if (err === 200) {
       setErrorText(failMessage[0])
     }
-    if (err === 409 || err === "Такой пользователь есть в базе данных" ) {
+    if (err === 409 || err === "Такой пользователь есть в базе данных") {
       setErrorText(failMessage[1])
     }
     if (err === 400) {
@@ -352,6 +342,7 @@ function App() {
     }
 
   }
+
 
   // регистрируем пользователя
   function handleRegister(name, email, password) {
@@ -371,6 +362,7 @@ function App() {
         setTimeout(() => errorSelection(0), 3000)
       })
   }
+
 
   // авторизуемся
   function handleLogin(email, password) {
@@ -394,6 +386,7 @@ function App() {
       })
   }
 
+
   // проверка токена
   function tokenCheck() {
     const token = localStorage.getItem('token');
@@ -414,6 +407,7 @@ function App() {
     }
   }
 
+
   // выход из системы
   function signOut() {
     setLoggedIn(false);
@@ -425,6 +419,7 @@ function App() {
     setCards([]);
     history.push('/');
   }
+
 
   return (
     <div className="page">
@@ -458,7 +453,6 @@ function App() {
               amountCards={amountCards}
               handleSubmit={handleSubmit}
               cards={cards}
-              getFilterСards={getFilterСards}
               isLoading={isLoading}
               searchText={searchText}
               cardOutputError={cardOutputError}
@@ -466,17 +460,18 @@ function App() {
               handleLoadMore={handleLoadMore}
               handleChangeCheckbox={handleChangeCheckbox}
               changeLike={changeLike}
+              searchCards={searchCards}
             />
           </ProtectedRoute>
           <ProtectedRoute path="/saved-movies" loggedIn={loggedIn}>
             <SavedMovies
               amountCards={amountCards}
               isLoading={isLoading}
-              getFilteredSavedCards={getFilteredSavedCards}
               handleSubmitSavedCardText={handleSubmitSavedCardText}
               searchTextSavedCards={searchTextSavedCards}
               changeLike={changeLike}
               handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards}
+              searchSavedCards={searchSavedCards}
             />
           </ProtectedRoute>
           <Route path="*">

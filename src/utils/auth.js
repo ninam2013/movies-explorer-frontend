@@ -34,7 +34,7 @@ export const authorize = (email, password) => {
       if (data.token) {
         localStorage.setItem('token', data.token);
         return data;
-      }else {
+      } else {
         return data.message
       }
 

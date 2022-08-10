@@ -7,27 +7,26 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 function SavedMovies({
     amountCards,
     isLoading,
-    getFilteredSavedCards,
     handleSubmitSavedCardText,
     searchTextSavedCards,
     changeLike,
-    handleChangeCheckboxSavedCards })
-{
+    handleChangeCheckboxSavedCards,
+    searchSavedCards }) {
 
 
     return (
         <section className='saved-movies'>
             <SearchForm
-            isLoading={isLoading}
-            getFilteredSavedCards={getFilteredSavedCards}
-            searchTextSavedCards={searchTextSavedCards}
-            handleSubmitSavedCardText={handleSubmitSavedCardText}
-            handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards}
+                isLoading={isLoading}
+                searchTextSavedCards={searchTextSavedCards}
+                handleSubmitSavedCardText={handleSubmitSavedCardText}
+                handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards}
+                searchSavedCards={searchSavedCards}
             />
             <MoviesCardList
-            amountCards={amountCards}
-            getFilteredSavedCards={getFilteredSavedCards}
-            changeLike={changeLike}
+                amountCards={amountCards}
+                changeLike={changeLike}
+                searchSavedCards={searchSavedCards}
             />
         </section>
     )

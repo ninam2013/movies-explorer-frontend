@@ -4,12 +4,12 @@ import './Navigation.css';
 import Account from '../Account/Account';
 
 
-function Navigation({ openMenu }) {    
+function Navigation({ openMenu }) {
     return (
         <>
             <nav className='navigation'>
                 <div className="navigation__container">
-                    <NavLink to="/movies" className="link" activeClassName="active-link-navigation"> 
+                    <NavLink to="/movies" className="link" activeClassName="active-link-navigation">
                         <p className="navigation__text">Фильмы</p>
                     </NavLink>
                     <NavLink to="/saved-movies" className="link" activeClassName="active-link-navigation">
