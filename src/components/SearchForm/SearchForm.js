@@ -13,9 +13,10 @@ function SearchForm(
         searchText,
         getFilteredSavedCards,
         handleSubmitSavedCardText,
-        searchTextSavedCards
-    })
-{
+        searchTextSavedCards,
+        handleChangeCheckbox,
+        handleChangeCheckboxSavedCards
+    }) {
 
     const location = useLocation();
 
@@ -32,14 +33,14 @@ function SearchForm(
                         <button className='search-form__button' type='submit'>Найти</button>
                     </form>
                 }
-                <FilterCheckbox />
+                <FilterCheckbox handleChangeCheckbox={handleChangeCheckbox} handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards} location={location} />
             </div>
 
             {isLoading && <Preloader />}
             {
                 location.pathname === '/movies' ?
-                    (getFilterСards.length === 0 && searchText ) && <p className='search-form__alert'> Ничего не найдено </p>
-                    : (getFilteredSavedCards.length === 0 && searchTextSavedCards ) && <p className='search-form__alert'> Ничего не найдено </p>
+                    (getFilterСards.length === 0 && searchText) && <p className='search-form__alert'> Ничего не найдено </p>
+                    : (getFilteredSavedCards.length === 0 && searchTextSavedCards) && <p className='search-form__alert'> Ничего не найдено </p>
             }
         </section>
     )

@@ -8,9 +8,10 @@ function SavedMovies({
     amountCards,
     isLoading,
     getFilteredSavedCards,
-    getDeleteCards,
     handleSubmitSavedCardText,
-    searchTextSavedCards })
+    searchTextSavedCards,
+    changeLike,
+    handleChangeCheckboxSavedCards })
 {
 
 
@@ -21,11 +22,12 @@ function SavedMovies({
             getFilteredSavedCards={getFilteredSavedCards}
             searchTextSavedCards={searchTextSavedCards}
             handleSubmitSavedCardText={handleSubmitSavedCardText}
+            handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards}
             />
             <MoviesCardList
             amountCards={amountCards}
             getFilteredSavedCards={getFilteredSavedCards}
-            getDeleteCards={getDeleteCards}
+            changeLike={changeLike}
             />
         </section>
     )

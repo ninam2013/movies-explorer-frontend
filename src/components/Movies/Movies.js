@@ -15,7 +15,9 @@ function Movies({
     searchText,
     cardOutputError,
     savedCards,
-    handleLoadMore })
+    handleLoadMore,
+    handleChangeCheckbox,
+    changeLike})
 {
 
 
@@ -26,17 +28,18 @@ function Movies({
                 isLoading={isLoading}
                 getFilterСards={getFilterСards}
                 searchText={searchText}
+                handleChangeCheckbox={handleChangeCheckbox}
+
             />
             <MoviesCardList
                 pathname={pathname}
                 amountCards={amountCards}
                 getFilterСards={getFilterСards}
-                getSavedCards={getSavedCards}
-                getDeleteCards={getDeleteCards}
                 cardId={cardId}
                 cardOutputError={cardOutputError}
                 savedCards={savedCards}
                 handleLoadMore={handleLoadMore}
+                changeLike={changeLike}
             />
         </section>
     )

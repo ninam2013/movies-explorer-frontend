@@ -13,7 +13,8 @@ function MoviesCardList({
     getFilteredSavedCards,
     getDeleteCards,
     cardOutputError,
-    handleLoadMore })
+    handleLoadMore,
+    changeLike })
 {
     const loc = useLocation();
 
@@ -27,20 +28,19 @@ function MoviesCardList({
                             movie={item}
                             key={item.id}
                             pathname={loc.pathname}
-                            getSavedCards={getSavedCards}
-                            getDeleteCards={getDeleteCards}
+                            changeLike={changeLike}
                         />) :
                         getFilteredSavedCards.slice(0, amountCards).map(item =>
                         <MoviesCard
                             movie={item}
                             key={item.movieId}
                             pathname={loc.pathname}
-                            getDeleteCards={getDeleteCards}
+                            changeLike={changeLike}
                         />)
             }
 
             {loc.pathname === '/movies' ?
-            (amountCards < getFilterСards.length ||  getFilterСards.length < 3) &&
+            (amountCards < getFilterСards.length || (getFilterСards.length < 3 && getFilterСards.length !== 0)) &&
                 <button className='movies-card-list__buttom' onClick={handleLoadMore} >Ещё</button> :
                 <button className='movies-card-list__buttom movies-card-list__buttom_visibility_hidden'>Ещё</button>
             }

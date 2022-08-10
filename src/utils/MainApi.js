@@ -16,7 +16,7 @@ class MainApi {
   }
 
   // сохранение фильма
-  saveMovie( movie, token ) {
+  saveMovie(movie, token) {
     return fetch(`${BASE_URL_SITE}/movies`, {
       method: "POST",
       headers: {
@@ -61,19 +61,41 @@ class MainApi {
         'Content-Type': 'application/json'
       }
     })
-    .then((res) => this._getResponseData(res));
+      .then((res) => this._getResponseData(res));
   }
 
-  // запрос данных фильмов
-  getMovies(token) {
-    return fetch(`${this._baseUrl}/movies`, {
+  // изменение данных пользователя
+  updateUserInfo(token, email, name) {
+    return fetch(`${this._baseUrl}/users/me`, {
       headers: {
         authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        email,
+        name
+      })
+    })
+      .then((res) => {
+      if (res.ok) {
+        return res.json();
       }
-    }).then((res) => this._getResponseData(res));
+      return Promise.reject((res.status));
+    })
   }
+
+// запрос данных фильмов
+getMovies(token) {
+  return fetch(`${this._baseUrl}/movies`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then((res) => this._getResponseData(res));
 }
+};
 
 const mainApi = new MainApi({
   baseUrl: `${BASE_URL_SITE}`

@@ -29,6 +29,11 @@
     border-bottom: 1px solid #E8E8E8;
 }
 
+.profile__wrap_change {
+    margin: 223px 0 0 0;
+    justify-content: center;
+}
+
 .profile__label {
     width: 100%;
     font-weight: 500;
@@ -64,7 +69,6 @@
     font-size: 13px;
     line-height: 16px;
     color: #000;
-    margin: 220px 0 0 0;
     padding: 0;
     transition: opacity .3s;
 }
@@ -82,6 +86,19 @@
     margin: 16px 0 0 0;
 }
 
+.profile__errors {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    text-align: center;
+    color: #FF004C;
+}
+
+.profile__errors_change {
+    position: absolute;
+    bottom: 120px;
+}
+
 .profile__button-save {
     display: flex;
     width: 410px;
@@ -96,13 +113,20 @@
     font-size: 14px;
     line-height: 17px;
     color: #FFF;
-    margin: 223px 0 0 0;
+    margin: 0;
     padding: 0;
     transition: all .3s;
+    position: relative;
 }
 
-.profile__button-save:hover {
+.profile__button-save:not([disabled]):hover {
     opacity: .6;
+}
+
+.profile__button-save:disabled {
+    background: #F8F8F8;
+    background: #C2C2C2;
+    cursor: default;
 }
 
 
@@ -112,16 +136,16 @@
         padding: 236px 0 269px 0;
     }
 
-    .profile__link {
-        margin: 210px 0 0 0;
-    }
-
     .profile__link_margin_top {
         margin: 16px 0 0 0;
     }
 
     .profile__wrap_padding_top {
         padding: 96px 0 0 0;
+    }
+
+    .profile__wrap_change {
+        margin: 210px 0 0 0;
     }
 }
 
@@ -139,6 +163,10 @@
         padding: 80px 0 0 0;
     }
 
+    .profile__wrap_change {
+        margin: 379px 0 0 0;
+    }
+
     .profile__input {
         width: 87%;
     }
@@ -146,14 +174,13 @@
     .profile__link {
         font-size: 12px;
         line-height: 15px;
-        margin: 379px 0 0 0;
     }
 
     .profile__link_margin_top {
         margin: 16px 0 0 0;
     }
 
-    .profile__button-save {       
+    .profile__button-save {
         width: 260px;
         height: 30px;
         font-size: 11px;

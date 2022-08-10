@@ -7,24 +7,13 @@ import { BASE_URL_MOVIE } from '../../utils/constants';
 function MoviesCard({
     movie,
     pathname,
-    getSavedCards,
-    getDeleteCards })
+    changeLike })
 {
+
 
     function handleLike(e) {
         e.preventDefault();
-        changeLike()
-    }
-
-    function changeLike() {
-        if (!movie.isSaved) {
-            getSavedCards(movie);    // добавляем карточку в избранное
-            console.log('добавляем');
-        } if (movie.isSaved) {
-
-            console.log('удаляем', movie);
-            getDeleteCards(movie); // удаляем карточку из избранного
-        }
+        changeLike(movie);
     }
 
     function translateTime(v) {

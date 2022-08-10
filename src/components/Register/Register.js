@@ -3,11 +3,11 @@ import './Register.css';
 import Form from '../Form/Form';
 
 
-function Register({ onRegister }) {
+function Register({ handleRegister, errorText }) {
   return (
     <section className='register'>
-      <Form onRegister={onRegister} />
-  
+      <Form handleRegister={handleRegister} errorText={errorText} />
+
     </section>
   )
 }
