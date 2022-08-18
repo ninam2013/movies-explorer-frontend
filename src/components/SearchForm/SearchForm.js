@@ -15,8 +15,8 @@ function SearchForm(
         handleChangeCheckbox,
         handleChangeCheckboxSavedCards,
         searchCards,
-        searchSavedCards
-    })
+        searchSavedCards,
+        searchSavedCardsCheckbox })
 {
 
     const location = useLocation();
@@ -26,7 +26,7 @@ function SearchForm(
             <div className='search-form__wrap'>
                 {location.pathname === '/movies' ?
                     <form className='search-form__search' onSubmit={handleSubmit} >
-                        <input type="text" className="search-form__input" placeholder="Фильм" required />
+                        <input type="text" className="search-form__input" placeholder="Фильм" defaultValue={JSON.parse(localStorage.getItem('searchText'))} name='movie' required />   {/* 1 */}
                         <button className='search-form__button' type='submit'>Найти</button>
                     </form>
                     : <form className='search-form__search' onSubmit={handleSubmitSavedCardText} >
@@ -41,7 +41,7 @@ function SearchForm(
             {
                 location.pathname === '/movies' ?
                     (searchCards.length === 0 && searchText) && <p className='search-form__alert'> Ничего не найдено </p>
-                    : (searchSavedCards.length === 0 && searchTextSavedCards) && <p className='search-form__alert'> Ничего не найдено </p>
+                    : ((searchSavedCards.length === 0 && searchTextSavedCards) || (searchSavedCardsCheckbox.length === 0)) && <p className='search-form__alert'> Ничего не найдено </p>
             }
         </section>
     )

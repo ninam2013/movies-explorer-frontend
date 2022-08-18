@@ -7,13 +7,14 @@ import { BASE_URL_MOVIE } from '../../utils/constants';
 function MoviesCard({
     movie,
     pathname,
-    changeLike }) {
-
+    changeLike })
+{
 
     function handleLike(e) {
         e.preventDefault();
         changeLike(movie);
     }
+
 
     function translateTime(v) {
         let hours = Math.trunc(v / 60);

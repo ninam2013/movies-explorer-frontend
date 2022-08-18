@@ -25,6 +25,13 @@ function Profile({
     }
   }
 
+  const changeDisabledButton = () => {
+    if ((values.name !== currentUser.name || values.email !== currentUser.email) && isValid) {
+      return false;
+    }
+    return true;
+  }
+
   return (
     <section className='profile'>
       <form noValidate onSubmit={onSubmit}>
@@ -44,10 +51,10 @@ function Profile({
         </div>
         <span className="profile__errors">{errors && errors["email"] !== "" && errors["email"]}</span>
         <div className='profile__wrap profile__wrap_change'>
-          {errors &&
+          {(errors && errors["email"] !== "" && errors["email"]) &&
             <span className="profile__errors profile__errors_change">{errorText}</span>}
           {profileEditing &&
-            <button type="submit" className='profile__button-save' disabled={!isValid} onSubmit={onSubmit}>Сохранить</button>
+            <button type="submit" className='profile__button-save' disabled={changeDisabledButton()} onSubmit={onSubmit}>Сохранить</button>
           }
         </div>
       </form>

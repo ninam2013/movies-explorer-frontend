@@ -12,7 +12,7 @@ function Header({ pathname, openMenu, loggedIn }) {
        ${pathname === '/' && 'header_background_black'} ${(pathname === '/signup' || pathname === '/signin') && 'header_appearance_change'}
       `
   )
-  // ${(loggedIn && pathname === '/') &&  'header_background_black'}
+
   let header;
   if (pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile') {
     header = (<Navigation openMenu={openMenu} />)
@@ -30,9 +30,11 @@ function Header({ pathname, openMenu, loggedIn }) {
 
   return (
     <header className={headerClassName}>
+      { (pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' || pathname === '/' || pathname === '/signin' || pathname === '/signup') &&
       <NavLink to="/" className="link">
         <img src={logo} className="header__logo" alt="logo" />
       </NavLink>
+      }
       {pathname === '/' && !loggedIn ?
         <nav className="header__container-registration">
           <NavLink to="/signup" className="link">

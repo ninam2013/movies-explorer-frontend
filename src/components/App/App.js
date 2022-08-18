@@ -18,6 +18,7 @@ import mainApi from "../../utils/MainApi";
 import CurrentUserContext from '../../context/CurrentUserContext';
 import { useCurrentWidth } from '../../hooks/useCurrentWidth';
 import { failMessage } from '../../utils/constants';
+import { storage } from '../../utils/storage'
 
 function App() {
 
@@ -49,7 +50,8 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   // видимость кнопок в профиле
   const [profileEditing, setProfileEditing] = useState(false);
-
+  // карточки при поиске
+  const [searchCards, setSearchCards] = useState([]);
 
   const location = useLocation();
   const history = useHistory();
@@ -63,8 +65,8 @@ function App() {
 
   // изначальная загрузка данных пользователя
   useEffect(() => {
-    const token = localStorage.getItem('token');  //сохраняем токен в переменной
     if (loggedIn) {   // если залогинен
+      const token = localStorage.getItem('token');  //сохраняем токен в переменной
       setIsLoading(true);   //включаю прелоадер
       Promise.all([
         mainApi.getMovies(token), //запрос данных карточек
@@ -74,7 +76,7 @@ function App() {
           .movies.filter((m) => m.owner === currentUser._id)        // фильтруем данные карточек по id
           .map(m => { m.isSaved = true; return m; })    // добавляю значение isSaved = true
           ;
-        localStorage.setItem('savedCards', JSON.stringify(userSavedCards));    // записываю данные карточек в хранилище
+        storage.setItem('savedCards', userSavedCards);
         setSavedCards(userSavedCards);  // записываю данные карточек в стейт
         setCurrentUser(userInfo.data);  // записываю данные пользователя в стейт
       })
@@ -86,12 +88,12 @@ function App() {
   }, [loggedIn, currentUser._id]);
 
 
-  // запись карточек на сервер, в стейт и хранилище
+  // запись карточек c сервера, в стейт и хранилище
   const fetchCards = () => {
     moviesApi.getMoviesBeatfilm()   // делаю запрос на сервер beatfilm-movies
       .then((res) => {
         setCards(res);   // записываю данные карточек с сервера в стейт
-        localStorage.setItem('cards', JSON.stringify(res)) // записываю данные карточек с сервера в хранилище
+        storage.setItem('cards', res);     // записываю данные карточек с сервера в хранилище
       })
       .catch((err) => setCardOutputError(true))     // если что-то пошло не так выдаю ошибку
   }
@@ -176,7 +178,9 @@ function App() {
   // при сабмите поиска фильма
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSearchText(e.target[0].value);
+    storage.setItem('searchText', e.target[0].value);      // сохранил в хранилище
+    setSearchText(storage.getItem('searchText'));         // сохранил из хранилища в стейт
+    changeWidth(width);       // возвращаем начальное значение кол-ва карточек для показа
   }
 
 
@@ -186,12 +190,18 @@ function App() {
     setSearchTextSavedCards(e.target[0].value);
   }
 
+  useEffect(() => {                // обнуляю стейт при переходе на другую страницу
+    setSearchTextSavedCards('');
+  }, [location.pathname])
+
 
   // изменение согласно чекбокса
   function handleChangeCheckbox(e) {
     if (e.target.checked) {
-      setCheckbox(true);
+      storage.setItem('checkbox', true);       // сохранил в хранилище
+      setCheckbox(storage.getItem('checkbox'));     // сохранил из хранилища в стейт
     } else {
+      localStorage.removeItem('checkbox');       // удалил из хранилища
       setCheckbox(false);
     }
   }
@@ -199,12 +209,9 @@ function App() {
 
   // изменение согласно чекбокса сохраненные карточки
   function handleChangeCheckboxSavedCards(e) {
-    if (e.target.checked) {
-      setCheckboxSavedCards(true);
-    } else {
-      setCheckboxSavedCards(false);
-    }
+    e.target.checked ? setCheckboxSavedCards(true) : setCheckboxSavedCards(false);
   }
+
 
   // фильтрация карточек
   function search(cardsList, filter, isShort) {
@@ -219,25 +226,36 @@ function App() {
     return filteredCards;
   }
 
-  // поиск по названию фильма
-  const searchCards = search(cards, searchText, checkbox);
+
+  useEffect(() => {
+    storage.setItem('searchCards', search(cards, searchText, checkbox));
+    setSearchCards(storage.getItem('searchCards'));
+  }, [cards, searchText, checkbox])
+
 
   // поиск по названию сохраненного фильма
   const searchSavedCards = search(savedCards, searchTextSavedCards, checkboxSavedCards);
+  const searchSavedCardsCheckbox = search(savedCards, false, checkboxSavedCards);
 
 
   // определяю сохранять или удалять карточку
   function changeLike(movie) {
-    if (!movie.isSaved) {
-      getSavedCards(movie);    // добавляем карточку в избранное
-    } if (movie.isSaved) {
-      getDeleteCards(movie); // удаляем карточку из избранного
+    !movie.isSaved ? saveCard(movie) : deleteCard(movie)
+
+    let _searchCards = [...searchCards];
+    let movieIndex;
+    for (movieIndex in _searchCards) {
+      if (_searchCards[movieIndex].nameRU === movie.nameRU) {
+        break;
+      }
     }
+    _searchCards[movieIndex].isSaved = !movie.isSaved;
+    setSearchCards(_searchCards);     // изменяем в стейт searchCards isSaved = не isSaved
   }
 
 
   // сохранение данных определенной карточки
-  function getSavedCards(movie) {
+  function saveCard(movie) {
     const token = localStorage.getItem('token');
     if (localStorage.getItem('savedCards') === null) {    // если в хранилище пусто, срабатывает этот код
       setIsLoading(true);     // включаем прелоадер
@@ -245,8 +263,8 @@ function App() {
         .then((movieData) => {    // возвращается объект с объектами {data:{data:{значения}}}
           movieData.data.isSaved = true;
           const changeObj = [movieData.data];   // привожу в массив с объектом без data
-          localStorage.setItem('savedCards', JSON.stringify(changeObj));    // записываю в хранилище как строку
-          const newLocalSavedCards = JSON.parse(localStorage.getItem('savedCards'));  // записываю в переменную массив с данными
+          storage.setItem('savedCards', changeObj);
+          const newLocalSavedCards = storage.getItem('savedCards');  // записываю в переменную массив с данными
           setSavedCards(newLocalSavedCards);    // записываю в стейт как массив с объектом
         })
         .catch((err) => console.log(err))     // в обратном случае ошибка
@@ -255,7 +273,7 @@ function App() {
         });
     }
     if (localStorage.getItem('savedCards') !== null) {    // если в хранилище что-то есть, срабатывает этот код
-      const localSavedCards = JSON.parse(localStorage.getItem('savedCards'));  // в переменную записываем массив с объектом из хранилища
+      const localSavedCards = storage.getItem('savedCards');  // в переменную записываем массив с объектом из хранилища
       const isSaved = localSavedCards.some((m) => m.movieId === movie.id);   // проверяем одинаковые ли id из хранилища и новой карточки
       if (!isSaved) {   // если значения id разные
         setIsLoading(true);   // включаем прелоадер
@@ -263,8 +281,8 @@ function App() {
           .then((movieData) => {         //возвращается объект с объектами {data:{значения}}}
             movieData.data.isSaved = true;
             const changeObj = [movieData.data];    // привожу в массив с объектом без data
-            localStorage.setItem('savedCards', JSON.stringify([...localSavedCards, ...changeObj]));       // записываю в хранилище как строку
-            const newLocalSavedCards = JSON.parse(localStorage.getItem('savedCards'));       // записываю в переменную
+            storage.setItem('savedCards', [...localSavedCards, ...changeObj]);      // записываю в хранилище как строку
+            const newLocalSavedCards = storage.getItem('savedCards');       // записываю в переменную
             setSavedCards(newLocalSavedCards);   //записываю в стейт как массив с объектом из локального хранилища
           })
           .catch((err) => console.log(err))      // в обратном случае ошибка
@@ -277,16 +295,22 @@ function App() {
 
 
   // удаление карточки
-  function getDeleteCards(movie) {
+  function deleteCard(movie) {
     setIsLoading(true);   //включаем прелоадер
     const token = localStorage.getItem('token');  // записываем токен в переменную
-    const localSavedCards = JSON.parse(localStorage.getItem('savedCards'));  // данные хранящиеся в хранилище
-    const desiredСard = localSavedCards.filter((obj) => (obj.movieId === movie.id) || (obj.movieId === movie.movieId));  // привожу к одному виду
+    const localSavedCards = storage.getItem('savedCards');  // данные хранящиеся в хранилище
+    const desiredСard = localSavedCards.filter((obj) => (obj.movieId === movie.movieId) || (obj.movieId === movie.id));  // привожу к одному виду
+    if (desiredСard.length === 0) {
+      setIsLoading(false);
+      return;
+    }
     mainApi.deleteCard(desiredСard[0]._id, token)   // делаем запрос на удаление
       .then((res) => {
-        const newCards = localSavedCards.filter((obj) => obj._id !== movie._id);  // фильтруем карточки и оставляем в переменной все кроме удаленной
-        localStorage.setItem('savedCards', JSON.stringify(newCards));   // перезаписываем новые данные сохраненных карточек в хранилище
-        setSavedCards(newCards);   // перезаписываем новые данные в стейт без удаленной карточки, можно такой вариант
+        const newCards = localSavedCards.filter((obj) => {
+          return obj.nameRU !== movie.nameRU
+        });  // фильтруем карточки и оставляем в переменной все кроме удаленной
+        storage.setItem('savedCards', newCards);   // перезаписываем новые данные сохраненных карточек в хранилище
+        setSavedCards(newCards);   // перезаписываем новые данные в стейт без удаленной карточки
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -373,6 +397,7 @@ function App() {
           localStorage.setItem('token', data.token);
           setCurrentUser(data)
           setLoggedIn(true);
+          setLoggedIn(true);
           history.push('/movies');
         } else {
           errorSelection(data)
@@ -397,7 +422,6 @@ function App() {
           if (res) {
             setLoggedIn(true);
             setCurrentUser({ name: res.data.name, email: res.data.email, id: res.data._id })
-            history.push("/movies");
           } else {
             setLoggedIn(false);
             history.push('/');
@@ -415,11 +439,14 @@ function App() {
     localStorage.removeItem('token');
     localStorage.removeItem('savedCards');
     localStorage.removeItem('cards');
+    localStorage.removeItem('checkbox');
+    localStorage.removeItem('searchText');
+    localStorage.removeItem('searchCards');
+    setSearchCards([]);
     setSavedCards([]);
     setCards([]);
     history.push('/');
   }
-
 
   return (
     <div className="page">
@@ -439,7 +466,7 @@ function App() {
           <Route path="/signin">
             <Login handleLogin={handleLogin} errorText={errorText} />
           </Route>
-          <ProtectedRoute path="/profile" loggedIn={loggedIn}>
+          <ProtectedRoute path="/profile" loggedIn={loggedIn} >
             <Profile
               signOut={signOut}
               handleEditProfile={handleEditProfile}
@@ -448,12 +475,12 @@ function App() {
               profileEditing={profileEditing}
             />
           </ProtectedRoute>
+
           <ProtectedRoute path="/movies" loggedIn={loggedIn}>
             <Movies
               pathname={location.pathname}
               amountCards={amountCards}
               handleSubmit={handleSubmit}
-              cards={cards}
               isLoading={isLoading}
               searchText={searchText}
               cardOutputError={cardOutputError}
@@ -462,6 +489,8 @@ function App() {
               handleChangeCheckbox={handleChangeCheckbox}
               changeLike={changeLike}
               searchCards={searchCards}
+              searchSavedCards={searchSavedCards}
+              searchTextSavedCards={searchTextSavedCards}
             />
           </ProtectedRoute>
           <ProtectedRoute path="/saved-movies" loggedIn={loggedIn}>
@@ -473,6 +502,8 @@ function App() {
               changeLike={changeLike}
               handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards}
               searchSavedCards={searchSavedCards}
+              deleteCard={deleteCard}
+              searchSavedCardsCheckbox={searchSavedCardsCheckbox}
             />
           </ProtectedRoute>
           <Route path="*">

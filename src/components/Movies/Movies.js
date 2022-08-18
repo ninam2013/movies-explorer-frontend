@@ -11,11 +11,13 @@ function Movies({
     cardId,
     searchText,
     cardOutputError,
-    savedCards,
     handleLoadMore,
     handleChangeCheckbox,
     changeLike,
-    searchCards }) {
+    searchCards,
+    searchSavedCards,
+    searchTextSavedCards })
+{
 
 
     return (
@@ -26,16 +28,18 @@ function Movies({
                 searchText={searchText}
                 handleChangeCheckbox={handleChangeCheckbox}
                 searchCards={searchCards}
+                searchSavedCards={searchSavedCards}
             />
             <MoviesCardList
                 pathname={pathname}
                 amountCards={amountCards}
                 cardId={cardId}
                 cardOutputError={cardOutputError}
-                savedCards={savedCards}
                 handleLoadMore={handleLoadMore}
                 changeLike={changeLike}
                 searchCards={searchCards}
+                searchSavedCards={searchSavedCards}
+                searchTextSavedCards={searchTextSavedCards}
             />
         </section>
     )

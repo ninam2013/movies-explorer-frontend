@@ -11,8 +11,9 @@ function SavedMovies({
     searchTextSavedCards,
     changeLike,
     handleChangeCheckboxSavedCards,
-    searchSavedCards }) {
-
+    searchSavedCards,
+    searchSavedCardsCheckbox })
+{
 
     return (
         <section className='saved-movies'>
@@ -22,11 +23,14 @@ function SavedMovies({
                 handleSubmitSavedCardText={handleSubmitSavedCardText}
                 handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards}
                 searchSavedCards={searchSavedCards}
+                searchSavedCardsCheckbox={searchSavedCardsCheckbox}
             />
             <MoviesCardList
                 amountCards={amountCards}
                 changeLike={changeLike}
                 searchSavedCards={searchSavedCards}
+                searchTextSavedCards={searchTextSavedCards}
+                searchSavedCardsCheckbox={searchSavedCardsCheckbox}
             />
         </section>
     )

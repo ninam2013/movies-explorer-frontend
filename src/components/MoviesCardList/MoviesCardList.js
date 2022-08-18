@@ -5,16 +5,19 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import { errorServer } from '../../utils/constants'
 
 
-
 function MoviesCardList({
     amountCards,
     cardOutputError,
     handleLoadMore,
     changeLike,
     searchCards,
-    searchSavedCards }) {
+    searchSavedCards,
+    searchTextSavedCards,
+    searchSavedCardsCheckbox })
+{
 
     const loc = useLocation();
+    const displaySavedCards = searchTextSavedCards ? searchSavedCards : searchSavedCardsCheckbox;
 
     return (
         <section className='movies-card-list'>
@@ -27,7 +30,7 @@ function MoviesCardList({
                             pathname={loc.pathname}
                             changeLike={changeLike}
                         />) :
-                    searchSavedCards.slice(0, amountCards).map(item =>
+                    displaySavedCards.slice(0, amountCards).map(item =>
                         <MoviesCard
                             movie={item}
                             key={item.movieId}
@@ -37,7 +40,7 @@ function MoviesCardList({
             }
 
             {loc.pathname === '/movies' ?
-                (amountCards < searchCards.length || (searchCards.length < 3 && searchCards.length !== 0)) &&
+                (amountCards < searchCards.length || (searchCards.length > 3 && searchCards.length > amountCards)) &&
                 <button className='movies-card-list__buttom' onClick={handleLoadMore} >Ещё</button> :
                 <button className='movies-card-list__buttom movies-card-list__buttom_visibility_hidden'>Ещё</button>
             }
