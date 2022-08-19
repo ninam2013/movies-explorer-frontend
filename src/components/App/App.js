@@ -112,6 +112,7 @@ function App() {
           for (let m of localCardsList) {     // перебираем и добавляем значение isSaved
             m.isSaved = !!savedCardsMap[m.id];
           }
+          storage.setItem('cards', localCardsList);
           setCards(localCardsList)    //записываем в стейт данные карточек localCardsList
         }
       }
@@ -215,6 +216,7 @@ function App() {
 
   // фильтрация карточек
   function search(cardsList, filter, isShort) {
+    // console.log('cardsList=', cardsList, 'filter=', filter, 'isShort=', isShort);
     let filteredCards = cardsList;
     if (filter) {
       filteredCards = filteredCards.filter(card =>
@@ -228,8 +230,29 @@ function App() {
 
 
   useEffect(() => {
+      let localSearchText = storage.getItem('searchText');
+    if(!searchText && searchText === '' && localSearchText !== ''){
+      // console.log('есть в хранилище', !searchText && searchText === '' && localSearchText !== '');
+      let localCards = storage.getItem('cards');
+      storage.setItem('searchCards', search(localCards, localSearchText, checkbox));
+      setSearchCards(storage.getItem('searchCards'));
+    }
+
+    if(searchText === null){
+      // console.log('если поиск null', searchText === null);
+      setSearchCards([]);
+    }
+
+    if(!searchText && !localSearchText){
+      // console.log('нет поиска', !searchText && !localSearchText);
+      setSearchCards([]);
+    }
+
+    if(searchText && searchText !== null){
+      // console.log('всё остальное', searchText || searchText !== null);
     storage.setItem('searchCards', search(cards, searchText, checkbox));
     setSearchCards(storage.getItem('searchCards'));
+    }
   }, [cards, searchText, checkbox])
 
 
