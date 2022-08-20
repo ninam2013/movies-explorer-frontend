@@ -79,6 +79,7 @@ function App() {
         storage.setItem('savedCards', userSavedCards);
         setSavedCards(userSavedCards);  // записываю данные карточек в стейт
         setCurrentUser(userInfo.data);  // записываю данные пользователя в стейт
+        setCheckbox(storage.getItem('checkbox'));
       })
         .catch((err) => console.log(err))   // если что-то не так вывожу ошибку
         .finally(() => {
@@ -248,7 +249,7 @@ function App() {
       setSearchCards([]);
     }
 
-    if(searchText && searchText !== null){
+    if(!!searchText && searchText !== null){
       // console.log('всё остальное', searchText || searchText !== null);
     storage.setItem('searchCards', search(cards, searchText, checkbox));
     setSearchCards(storage.getItem('searchCards'));
@@ -263,7 +264,8 @@ function App() {
 
   // определяю сохранять или удалять карточку
   function changeLike(movie) {
-    !movie.isSaved ? saveCard(movie) : deleteCard(movie)
+    !movie.isSaved ? saveCard(movie) : deleteCard(movie);
+
 
     let _searchCards = [...searchCards];
     let movieIndex;
@@ -467,6 +469,10 @@ function App() {
     setSearchCards([]);
     setSavedCards([]);
     setCards([]);
+    setSearchText('');
+    setSearchTextSavedCards('');
+    setCheckbox(false);
+    setCheckboxSavedCards(false);
     history.push('/');
   }
 
@@ -534,6 +540,7 @@ function App() {
               searchSavedCards={searchSavedCards}
               deleteCard={deleteCard}
               searchSavedCardsCheckbox={searchSavedCardsCheckbox}
+              checkboxSavedCards={checkboxSavedCards}
             />
           </ProtectedRoute>
           <Route path="*">

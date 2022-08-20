@@ -12,7 +12,8 @@ function SavedMovies({
     changeLike,
     handleChangeCheckboxSavedCards,
     searchSavedCards,
-    searchSavedCardsCheckbox })
+    searchSavedCardsCheckbox,
+    checkboxSavedCards })
 {
 
     return (
@@ -24,6 +25,7 @@ function SavedMovies({
                 handleChangeCheckboxSavedCards={handleChangeCheckboxSavedCards}
                 searchSavedCards={searchSavedCards}
                 searchSavedCardsCheckbox={searchSavedCardsCheckbox}
+                checkboxSavedCards={checkboxSavedCards}
             />
             <MoviesCardList
                 amountCards={amountCards}

@@ -16,7 +16,8 @@ function SearchForm(
         handleChangeCheckboxSavedCards,
         searchCards,
         searchSavedCards,
-        searchSavedCardsCheckbox })
+        searchSavedCardsCheckbox,
+        checkboxSavedCards })
 {
 
     const location = useLocation();
@@ -40,8 +41,8 @@ function SearchForm(
             {isLoading && <Preloader />}
             {
                 location.pathname === '/movies' ?
-                    (searchCards.length === 0 && searchText) && <p className='search-form__alert'> Ничего не найдено </p>
-                    : ((searchSavedCards.length === 0 && searchTextSavedCards) || (searchSavedCardsCheckbox.length === 0)) && <p className='search-form__alert'> Ничего не найдено </p>
+                    (searchCards.length === 0 && !!searchText) && <p className='search-form__alert'> Ничего не найдено </p>
+                    : ((searchSavedCards.length === 0 && !!searchTextSavedCards) || (searchSavedCardsCheckbox.length === 0 && checkboxSavedCards)) && <p className='search-form__alert'> Ничего не найдено </p>
             }
         </section>
     )
