@@ -5,7 +5,7 @@ function ProtectedRoute({ children, loggedIn }) {
     <Route
       loggedIn={loggedIn}
       render={() => {
-        return localStorage.getItem('token') ? children : <Redirect to='/signin' />;
+        return localStorage.getItem('token') ? children : <Redirect to='/' />;
       }}
     />
   );

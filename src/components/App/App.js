@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory, Redirect } from 'react-router-dom';
 import './App.css';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -420,7 +420,6 @@ function App() {
           localStorage.setItem('token', data.token);
           setCurrentUser(data)
           setLoggedIn(true);
-          setLoggedIn(true);
           history.push('/movies');
         } else {
           errorSelection(data)
@@ -484,10 +483,18 @@ function App() {
             <Main />
           </Route>
           <Route path="/signup">
-            <Register handleRegister={handleRegister} errorText={errorText} />
+            { loggedIn ?
+              <Redirect push to="/" />
+             :
+             <Register handleRegister={handleRegister} errorText={errorText} />
+            }
           </Route>
           <Route path="/signin">
+          { loggedIn ?
+              <Redirect push to="/" />
+            :
             <Login handleLogin={handleLogin} errorText={errorText} />
+          }
           </Route>
           <ProtectedRoute path="/profile" loggedIn={loggedIn} >
             <Profile
