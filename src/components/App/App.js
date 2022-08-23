@@ -59,87 +59,71 @@ function App() {
 
   useEffect(() => {
     tokenCheck();
-    changeWidth(width);     // при изменении пути странички вызывается функция changeWidth
+    changeWidth(width);
   }, []);
 
 
-  // изначальная загрузка данных пользователя
   useEffect(() => {
-    if (loggedIn) {   // если залогинен
-      const token = localStorage.getItem('token');  //сохраняем токен в переменной
-      setIsLoading(true);   //включаю прелоадер
+    if (loggedIn) {
+      const token = localStorage.getItem('token');
+      setIsLoading(true);
       Promise.all([
-        mainApi.getMovies(token), //запрос данных карточек
-        mainApi.getUser(token)    //запрос данных пользователя
-      ]).then(([cards, userInfo]) => {        // приходят данные карточек и данные пользователя
+        mainApi.getMovies(token),
+        mainApi.getUser(token)
+      ]).then(([cards, userInfo]) => {
+        setCurrentUser(userInfo.data);
+        setCheckbox(storage.getItem('checkbox'));
         const userSavedCards = cards
-          .movies.filter((m) => m.owner === currentUser._id)        // фильтруем данные карточек по id
-          .map(m => { m.isSaved = true; return m; })    // добавляю значение isSaved = true
+          .movies.filter((m) => m.owner === currentUser._id)
+          .map(m => { m.isSaved = true; return m; })
           ;
         storage.setItem('savedCards', userSavedCards);
-        setSavedCards(userSavedCards);  // записываю данные карточек в стейт
-        setCurrentUser(userInfo.data);  // записываю данные пользователя в стейт
-        setCheckbox(storage.getItem('checkbox'));
+        setSavedCards(userSavedCards);
       })
-        .catch((err) => console.log(err))   // если что-то не так вывожу ошибку
+        .catch((err) => console.log(err))
         .finally(() => {
-          setIsLoading(false);    // выключаю прелоадер
+          setIsLoading(false);
         });
     }
   }, [loggedIn, currentUser._id]);
 
 
-  // запись карточек c сервера, в стейт и хранилище
   const fetchCards = () => {
-    moviesApi.getMoviesBeatfilm()   // делаю запрос на сервер beatfilm-movies
+    moviesApi.getMoviesBeatfilm()
       .then((res) => {
-        setCards(res);   // записываю данные карточек с сервера в стейт
-        storage.setItem('cards', res);     // записываю данные карточек с сервера в хранилище
+        setCards(res);
+        storage.setItem('cards', res);
       })
-      .catch((err) => setCardOutputError(true))     // если что-то пошло не так выдаю ошибку
+      .catch((err) => setCardOutputError(true))
   }
 
 
   useEffect(() => {
-    const localCards = localStorage.getItem('cards');   // записываем в переменную данные из хранилища
-    if (localCards) {   // если в переменной данные есть
+    const localCards = localStorage.getItem('cards');
+    if (localCards) {
       try {
-        if (searchText && searchText.length > 0) {      // если заполнен поиск
-          let savedCardsMap = {};
-          for (let m of savedCards) {     // перебираем сохраненные карточки
-            savedCardsMap[m.movieId] = true;
-          }
-          let localCardsList = JSON.parse(localCards);
-          for (let m of localCardsList) {     // перебираем и добавляем значение isSaved
-            m.isSaved = !!savedCardsMap[m.id];
-          }
-          storage.setItem('cards', localCardsList);
-          setCards(localCardsList)    //записываем в стейт данные карточек localCardsList
-        }
+          setCards(JSON.parse(localCards))
       }
-      catch (err) {       // если что-то пошло не так
-        localStorage.removeItem('cards');   // удаляем данные из локального хранилища
-        fetchCards();     // добавляем данные с сервера
+      catch (err) {
+        localStorage.removeItem('cards');
+        fetchCards();
       }
-    } else {    // если в переменной данных нет
-      fetchCards(); // добавляем данные с сервера
+    } else {
+      fetchCards();
     }
-  }, [searchText]);     // срабатывает если введен поиск
+  }, [loggedIn]);
 
 
-  // открыть мобильное меню
   function openMenu() {
     setMenuActive(true)
   };
 
 
-  // закрыть мобильное меню
   function closeMenu() {
     setMenuActive(false)
   };
 
 
-  // вывод количества карточек в зависимости от разрешения экрана
   function changeWidth(width) {
     if (width >= 320 && width < 480) {
       setAmountCards(5);
@@ -156,7 +140,6 @@ function App() {
   };
 
 
-  // вывод карточек по кнопке
   function getLoadStep(width) {
     if (width >= 1280) {
       return 3;
@@ -165,59 +148,52 @@ function App() {
   };
 
 
-  // при нажатии на кнопку "редактирование" происходит изменение странички
   function handleProfile() {
     setProfileEditing(true);
   }
 
 
-  // при нажатии на "ещё" появляются карточки
   function handleLoadMore() {
     setAmountCards((prevCount) => prevCount + getLoadStep(width))
   }
 
 
-  // при сабмите поиска фильма
   const handleSubmit = (e) => {
     e.preventDefault();
-    storage.setItem('searchText', e.target[0].value);      // сохранил в хранилище
-    setSearchText(storage.getItem('searchText'));         // сохранил из хранилища в стейт
-    changeWidth(width);       // возвращаем начальное значение кол-ва карточек для показа
+    storage.setItem('searchText', e.target[0].value);
+    setSearchText(storage.getItem('searchText'));
+    changeWidth(width);
   }
 
 
-  // при сабмите поиска сохраненных фильмов
   const handleSubmitSavedCardText = (e) => {
     e.preventDefault();
     setSearchTextSavedCards(e.target[0].value);
   }
 
-  useEffect(() => {                // обнуляю стейт при переходе на другую страницу
+
+  useEffect(() => {
     setSearchTextSavedCards('');
   }, [location.pathname])
 
 
-  // изменение согласно чекбокса
   function handleChangeCheckbox(e) {
     if (e.target.checked) {
-      storage.setItem('checkbox', true);       // сохранил в хранилище
-      setCheckbox(storage.getItem('checkbox'));     // сохранил из хранилища в стейт
+      storage.setItem('checkbox', true);
+      setCheckbox(storage.getItem('checkbox'));
     } else {
-      localStorage.removeItem('checkbox');       // удалил из хранилища
+      localStorage.removeItem('checkbox');
       setCheckbox(false);
     }
   }
 
 
-  // изменение согласно чекбокса сохраненные карточки
   function handleChangeCheckboxSavedCards(e) {
     e.target.checked ? setCheckboxSavedCards(true) : setCheckboxSavedCards(false);
   }
 
 
-  // фильтрация карточек
   function search(cardsList, filter, isShort) {
-    // console.log('cardsList=', cardsList, 'filter=', filter, 'isShort=', isShort);
     let filteredCards = cardsList;
     if (filter) {
       filteredCards = filteredCards.filter(card =>
@@ -232,40 +208,51 @@ function App() {
 
   useEffect(() => {
       let localSearchText = storage.getItem('searchText');
+      const lCards = localStorage.getItem('cards');
     if(!searchText && searchText === '' && localSearchText !== ''){
-      // console.log('есть в хранилище', !searchText && searchText === '' && localSearchText !== '');
-      let localCards = storage.getItem('cards');
-      storage.setItem('searchCards', search(localCards, localSearchText, checkbox));
+      storage.setItem('searchCards', search(processedCards(lCards), localSearchText, checkbox));
       setSearchCards(storage.getItem('searchCards'));
     }
 
     if(searchText === null){
-      // console.log('если поиск null', searchText === null);
       setSearchCards([]);
     }
 
     if(!searchText && !localSearchText){
-      // console.log('нет поиска', !searchText && !localSearchText);
       setSearchCards([]);
     }
 
     if(!!searchText && searchText !== null){
-      // console.log('всё остальное', searchText || searchText !== null);
-    storage.setItem('searchCards', search(cards, searchText, checkbox));
+    storage.setItem('searchCards', search(processedCards(lCards), searchText, checkbox));
     setSearchCards(storage.getItem('searchCards'));
     }
+
   }, [cards, searchText, checkbox])
 
 
-  // поиск по названию сохраненного фильма
+  function processedCards(localCards) {
+    let savedCardsMap = {};
+    let localSavedCards = storage.getItem('savedCards');
+    if(localSavedCards !== null){
+    for (let m of localSavedCards) {
+      savedCardsMap[m.nameRU] = true;
+    }
+    let localCardsList = JSON.parse(localCards);
+    for (let m of localCardsList) {
+      m.isSaved = !!savedCardsMap[m.nameRU];
+    }
+    return localCardsList;
+  }
+  return [];
+  }
+
+
   const searchSavedCards = search(savedCards, searchTextSavedCards, checkboxSavedCards);
   const searchSavedCardsCheckbox = search(savedCards, false, checkboxSavedCards);
 
 
-  // определяю сохранять или удалять карточку
   function changeLike(movie) {
     !movie.isSaved ? saveCard(movie) : deleteCard(movie);
-
 
     let _searchCards = [...searchCards];
     let movieIndex;
@@ -275,78 +262,75 @@ function App() {
       }
     }
     _searchCards[movieIndex].isSaved = !movie.isSaved;
-    setSearchCards(_searchCards);     // изменяем в стейт searchCards isSaved = не isSaved
+    setSearchCards(_searchCards);
   }
 
 
-  // сохранение данных определенной карточки
   function saveCard(movie) {
     const token = localStorage.getItem('token');
-    if (localStorage.getItem('savedCards') === null) {    // если в хранилище пусто, срабатывает этот код
-      setIsLoading(true);     // включаем прелоадер
-      mainApi.saveMovie(movie, token)   // делаем запрос
-        .then((movieData) => {    // возвращается объект с объектами {data:{data:{значения}}}
+    if (localStorage.getItem('savedCards') === null) {
+      setIsLoading(true);
+      mainApi.saveMovie(movie, token)
+        .then((movieData) => {
           movieData.data.isSaved = true;
-          const changeObj = [movieData.data];   // привожу в массив с объектом без data
+          const changeObj = [movieData.data];
           storage.setItem('savedCards', changeObj);
-          const newLocalSavedCards = storage.getItem('savedCards');  // записываю в переменную массив с данными
-          setSavedCards(newLocalSavedCards);    // записываю в стейт как массив с объектом
+          const newLocalSavedCards = storage.getItem('savedCards');
+          setSavedCards(newLocalSavedCards);
         })
-        .catch((err) => console.log(err))     // в обратном случае ошибка
+        .catch((err) => console.log(err))
         .finally(() => {
-          setIsLoading(false);    // выключаю прелоадер
+          setIsLoading(false);
         });
     }
-    if (localStorage.getItem('savedCards') !== null) {    // если в хранилище что-то есть, срабатывает этот код
-      const localSavedCards = storage.getItem('savedCards');  // в переменную записываем массив с объектом из хранилища
-      const isSaved = localSavedCards.some((m) => m.movieId === movie.id);   // проверяем одинаковые ли id из хранилища и новой карточки
-      if (!isSaved) {   // если значения id разные
-        setIsLoading(true);   // включаем прелоадер
-        mainApi.saveMovie(movie, token)   //делаем запрос и записывем данные на сервер
-          .then((movieData) => {         //возвращается объект с объектами {data:{значения}}}
+    if (localStorage.getItem('savedCards') !== null) {
+      const localSavedCards = storage.getItem('savedCards');
+      const isSaved = localSavedCards.some((m) => m.movieId === movie.id);
+      if (!isSaved) {
+        setIsLoading(true);
+        mainApi.saveMovie(movie, token)
+          .then((movieData) => {
             movieData.data.isSaved = true;
-            const changeObj = [movieData.data];    // привожу в массив с объектом без data
-            storage.setItem('savedCards', [...localSavedCards, ...changeObj]);      // записываю в хранилище как строку
-            const newLocalSavedCards = storage.getItem('savedCards');       // записываю в переменную
-            setSavedCards(newLocalSavedCards);   //записываю в стейт как массив с объектом из локального хранилища
+            const changeObj = [movieData.data];
+            storage.setItem('savedCards', [...localSavedCards, ...changeObj]);
+            const newLocalSavedCards = storage.getItem('savedCards');
+            setSavedCards(newLocalSavedCards);
           })
-          .catch((err) => console.log(err))      // в обратном случае ошибка
+          .catch((err) => console.log(err))
           .finally(() => {
-            setIsLoading(false);       // выключаю прелоадер
+            setIsLoading(false);
           });
       }
     }
   }
 
 
-  // удаление карточки
   function deleteCard(movie) {
-    setIsLoading(true);   //включаем прелоадер
-    const token = localStorage.getItem('token');  // записываем токен в переменную
-    const localSavedCards = storage.getItem('savedCards');  // данные хранящиеся в хранилище
-    const desiredСard = localSavedCards.filter((obj) => (obj.movieId === movie.movieId) || (obj.movieId === movie.id));  // привожу к одному виду
+    setIsLoading(true);
+    const token = localStorage.getItem('token');
+    const localSavedCards = storage.getItem('savedCards');
+    const desiredСard = localSavedCards.filter((obj) => (obj.movieId === movie.movieId) || (obj.movieId === movie.id));
     if (desiredСard.length === 0) {
       setIsLoading(false);
       return;
     }
-    mainApi.deleteCard(desiredСard[0]._id, token)   // делаем запрос на удаление
+    mainApi.deleteCard(desiredСard[0]._id, token)
       .then((res) => {
         const newCards = localSavedCards.filter((obj) => {
           return obj.nameRU !== movie.nameRU
-        });  // фильтруем карточки и оставляем в переменной все кроме удаленной
-        storage.setItem('savedCards', newCards);   // перезаписываем новые данные сохраненных карточек в хранилище
-        setSavedCards(newCards);   // перезаписываем новые данные в стейт без удаленной карточки
+        });
+        storage.setItem('savedCards', newCards);
+        setSavedCards(newCards);
       })
       .catch((err) => {
         console.log(`${err}`);
       })
       .finally(() => {
-        setIsLoading(false);    // выключаю прелоадер
+        setIsLoading(false);
       });
   }
 
 
-  // изменение профиля
   const handleEditProfile = ({ email, name }) => {
     setIsLoading(true);
     const token = localStorage.getItem('token');
@@ -369,7 +353,6 @@ function App() {
   }
 
 
-  // определение ошибок
   function errorSelection(err) {
     if (err === 0) {
       setErrorText('')
@@ -393,7 +376,6 @@ function App() {
   }
 
 
-  // регистрируем пользователя
   function handleRegister(name, email, password) {
     auth
       .register(name, email, password)
@@ -413,7 +395,6 @@ function App() {
   }
 
 
-  // авторизуемся
   function handleLogin(email, password) {
     auth
       .authorize(email, password)
@@ -436,7 +417,6 @@ function App() {
   }
 
 
-  // проверка токена
   function tokenCheck() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -456,7 +436,6 @@ function App() {
   }
 
 
-  // выход из системы
   function signOut() {
     setLoggedIn(false);
     setCurrentUser({});
