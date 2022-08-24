@@ -73,12 +73,15 @@ function App() {
       ]).then(([cards, userInfo]) => {
         setCurrentUser(userInfo.data);
         setCheckbox(storage.getItem('checkbox'));
+        let localSavedCards = localStorage.getItem('savedCards');
+        if(localSavedCards === null){
         const userSavedCards = cards
-          .movies.filter((m) => m.owner === currentUser._id)
+          .movies.filter((m) => m.owner === userInfo.data._id)
           .map(m => { m.isSaved = true; return m; })
           ;
         storage.setItem('savedCards', userSavedCards);
         setSavedCards(userSavedCards);
+          }
       })
         .catch((err) => console.log(err))
         .finally(() => {
@@ -152,6 +155,9 @@ function App() {
     setProfileEditing(true);
   }
 
+  function handleProfileBack() {
+    setProfileEditing(false);
+  }
 
   function handleLoadMore() {
     setAmountCards((prevCount) => prevCount + getLoadStep(width))
@@ -234,6 +240,7 @@ function App() {
     let savedCardsMap = {};
     let localSavedCards = storage.getItem('savedCards');
     if(localSavedCards !== null){
+      setSavedCards(localSavedCards);
     for (let m of localSavedCards) {
       savedCardsMap[m.nameRU] = true;
     }
@@ -253,7 +260,10 @@ function App() {
 
   function changeLike(movie) {
     !movie.isSaved ? saveCard(movie) : deleteCard(movie);
+  }
 
+
+  function cardUpdate(movie) {
     let _searchCards = [...searchCards];
     let movieIndex;
     for (movieIndex in _searchCards) {
@@ -266,12 +276,26 @@ function App() {
   }
 
 
+  function cardUpdateOnDeletion(movie) {
+    let _searchCards = [...searchCards];
+    let movieIndex;
+    for (movieIndex in _searchCards) {
+      if (_searchCards[movieIndex].nameRU === movie.nameRU) {
+        break;
+      }
+    }
+    _searchCards[movieIndex].isSaved = false;
+    setSearchCards(_searchCards);
+  }
+
+
   function saveCard(movie) {
     const token = localStorage.getItem('token');
     if (localStorage.getItem('savedCards') === null) {
       setIsLoading(true);
       mainApi.saveMovie(movie, token)
         .then((movieData) => {
+          cardUpdate(movieData.data);
           movieData.data.isSaved = true;
           const changeObj = [movieData.data];
           storage.setItem('savedCards', changeObj);
@@ -290,6 +314,7 @@ function App() {
         setIsLoading(true);
         mainApi.saveMovie(movie, token)
           .then((movieData) => {
+            cardUpdate(movieData.data);
             movieData.data.isSaved = true;
             const changeObj = [movieData.data];
             storage.setItem('savedCards', [...localSavedCards, ...changeObj]);
@@ -316,6 +341,7 @@ function App() {
     }
     mainApi.deleteCard(desiredСard[0]._id, token)
       .then((res) => {
+        cardUpdateOnDeletion(res.movieData);
         const newCards = localSavedCards.filter((obj) => {
           return obj.nameRU !== movie.nameRU
         });
@@ -487,6 +513,7 @@ function App() {
               handleEditProfile={handleEditProfile}
               errorText={errorText}
               handleProfile={handleProfile}
+              handleProfileBack={handleProfileBack}
               profileEditing={profileEditing}
             />
           </ProtectedRoute>

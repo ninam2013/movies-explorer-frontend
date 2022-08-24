@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './Profile.css';
 import CurrentUserContext from '../../context/CurrentUserContext';
 import { useFormWithValidation } from '../../hooks/useForm';
@@ -9,6 +9,7 @@ function Profile({
   handleEditProfile,
   errorText,
   handleProfile,
+  handleProfileBack,
   profileEditing })
 {
 
@@ -54,7 +55,10 @@ function Profile({
           {(errors && errors["email"] !== "" && errors["email"]) &&
             <span className="profile__errors profile__errors_change">{errorText}</span>}
           {profileEditing &&
+          <div className='profile__block-button'>
             <button type="submit" className='profile__button-save' disabled={changeDisabledButton()} onSubmit={onSubmit}>Сохранить</button>
+            <button className='profile__button-back' onClick={handleProfileBack}>Назад</button>
+          </div>
           }
         </div>
       </form>
