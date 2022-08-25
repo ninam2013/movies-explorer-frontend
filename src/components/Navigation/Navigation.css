@@ -15,7 +15,6 @@
 }
 
 .navigation__text {
-    font-weight: 400;
     font-size: 13px;
     line-height: 18px;
     color: #000;
@@ -23,8 +22,8 @@
     padding: 0;
 }
 
-.navigation__text_active {
-    font-weight: 500;
+.navigation__text_color_white {
+    color: #FFF;
 }
 
 .navigation__text_margin_left {
@@ -63,6 +62,10 @@
 
 .navigation-mobile {
     display: none;
+}
+
+.active-link-navigation {
+     font-weight: 500;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1279.9px) {

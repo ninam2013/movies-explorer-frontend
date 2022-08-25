@@ -2,19 +2,46 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { cardContent } from '../../utils/constants';
+import { errorServer } from '../../utils/constants'
 
 
-function MoviesCardList({ amountCards }) {
+function MoviesCardList({
+    amountCards,
+    cardOutputError,
+    handleLoadMore,
+    changeLike,
+    searchCards,
+    searchSavedCards,
+    searchTextSavedCards,
+    searchSavedCardsCheckbox })
+{
+
     const loc = useLocation();
+    const displaySavedCards = searchTextSavedCards ? searchSavedCards : searchSavedCardsCheckbox;
+
     return (
         <section className='movies-card-list'>
-            {cardContent.slice(0, amountCards).map(item =>
-                <MoviesCard title={item.title} time={item.time} src={item.src} img={item.img} key={item.id} pathname={loc.pathname} />)
+            {cardOutputError ? <p className='user-alert'>{errorServer}</p> :
+                loc.pathname === '/movies' ?
+                    searchCards.slice(0, amountCards).map(item =>
+                        <MoviesCard
+                            movie={item}
+                            key={item.id}
+                            pathname={loc.pathname}
+                            changeLike={changeLike}
+                        />) :
+                    displaySavedCards.slice(0, amountCards).map(item =>
+                        <MoviesCard
+                            movie={item}
+                            key={item.movieId}
+                            pathname={loc.pathname}
+                            changeLike={changeLike}
+                        />)
             }
 
             {loc.pathname === '/movies' ?
-                <button className='movies-card-list__buttom'>Ещё</button> :
+                (amountCards < searchCards.length || (searchCards.length > 3 && searchCards.length > amountCards)) &&
+                <button className='movies-card-list__buttom' onClick={handleLoadMore} >Ещё</button> :
                 <button className='movies-card-list__buttom movies-card-list__buttom_visibility_hidden'>Ещё</button>
             }
         </section>

@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Account.css';
 import pic from '../../images/pic.svg';
-import { userName } from '../../utils/constants';
+import CurrentUserContext from '../../context/CurrentUserContext';
 
-function Account() {
-
+function Account({loggedIn}) {
+    const value = useContext(CurrentUserContext);
+    const accountClassName = (
+        `${!loggedIn && 'account-text'}
+         ${loggedIn && 'account-text account-text_color_white'}
+        `
+      )
     return (
         <div className='button-profile'>
-            <p className="account-text">{userName}</p>
+            <p className={accountClassName}>{value.name}</p>
             <div className='pic-background'>
                 <img src={pic} alt="pic" />
             </div>
